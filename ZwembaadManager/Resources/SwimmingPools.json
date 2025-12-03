@@ -1,0 +1,72 @@
+[
+    {
+        "Id": 1,
+        "AddressId": 5,
+        "Name": "Neerpelt Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "10"
+    },
+    {
+        "Id": 2,
+        "AddressId": 5,
+        "Name": "Corenne Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "8"
+    },
+    {
+        "Id": 3,
+        "AddressId": 1,
+        "Name": "Comblain-Fairon Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "6"
+    },
+    {
+        "Id": 4,
+        "AddressId": 2,
+        "Name": "Mouzaive Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "8"
+    },
+    {
+        "Id": 5,
+        "AddressId": 4,
+        "Name": "Eksaarde Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "10"
+    },
+    {
+        "Id": 6,
+        "AddressId": 5,
+        "Name": "Buvingen Pool",
+        "PoolLength": "25",
+        "NumberOfLanes": "8"
+    },
+    {
+        "Id": 7,
+        "AddressId": 1,
+        "Name": "Hannut Pool",
+        "PoolLength": "25",
+        "NumberOfLanes": "10"
+    },
+    {
+        "Id": 8,
+        "AddressId": 9,
+        "Name": "Manhay Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "8"
+    },
+    {
+        "Id": 9,
+        "AddressId": 3,
+        "Name": "Sint-Martens-Latem Pool",
+        "PoolLength": "25",
+        "NumberOfLanes": "8"
+    },
+    {
+        "Id": 10,
+        "AddressId": 2,
+        "Name": "Amougies Pool",
+        "PoolLength": "50",
+        "NumberOfLanes": "8"
+    }
+]

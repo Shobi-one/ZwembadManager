@@ -1,0 +1,52 @@
+[
+    {
+        "Id": 1,
+        "Name": "Product/process development scientist",
+        "Abbreviation": "FP"
+    },
+    {
+        "Id": 2,
+        "Name": "Engineer, production",
+        "Abbreviation": "XF"
+    },
+    {
+        "Id": 3,
+        "Name": "Immunologist",
+        "Abbreviation": "RJ"
+    },
+    {
+        "Id": 4,
+        "Name": "Waste management officer",
+        "Abbreviation": "GM"
+    },
+    {
+        "Id": 5,
+        "Name": "Risk manager",
+        "Abbreviation": "SU"
+    },
+    {
+        "Id": 6,
+        "Name": "Naval architect",
+        "Abbreviation": "CI"
+    },
+    {
+        "Id": 7,
+        "Name": "Photographer",
+        "Abbreviation": "HB"
+    },
+    {
+        "Id": 8,
+        "Name": "Tourist information centre manager",
+        "Abbreviation": "OJ"
+    },
+    {
+        "Id": 9,
+        "Name": "Land/geomatics surveyor",
+        "Abbreviation": "SF"
+    },
+    {
+        "Id": 10,
+        "Name": "Futures trader",
+        "Abbreviation": "CU"
+    }
+]

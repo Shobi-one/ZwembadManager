@@ -1,0 +1,52 @@
+[
+    {
+        "Id": 1,
+        "Name": "Lee and Sons",
+        "Abbreviation": "AMC"
+    },
+    {
+        "Id": 2,
+        "Name": "White, Hughes and Hensley",
+        "Abbreviation": "IMI"
+    },
+    {
+        "Id": 3,
+        "Name": "Ramirez, Mcbride and Dawson",
+        "Abbreviation": "GYD"
+    },
+    {
+        "Id": 4,
+        "Name": "Johnson and Sons",
+        "Abbreviation": "QFJ"
+    },
+    {
+        "Id": 5,
+        "Name": "Huerta Group",
+        "Abbreviation": "YBV"
+    },
+    {
+        "Id": 6,
+        "Name": "Acosta, Contreras and Mora",
+        "Abbreviation": "WOI"
+    },
+    {
+        "Id": 7,
+        "Name": "Cain Ltd",
+        "Abbreviation": "YZB"
+    },
+    {
+        "Id": 8,
+        "Name": "Wright-Wilson",
+        "Abbreviation": "VEE"
+    },
+    {
+        "Id": 9,
+        "Name": "Gibson-Woods",
+        "Abbreviation": "HGJ"
+    },
+    {
+        "Id": 10,
+        "Name": "Chandler Group",
+        "Abbreviation": "FAH"
+    }
+]
