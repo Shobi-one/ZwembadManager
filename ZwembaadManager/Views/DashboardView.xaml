@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZwembaadManager.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600" Width="966">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -13,27 +13,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
             <TextBlock Text="Zwembad Manager Dashboard" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- Main Content -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel Margin="20" HorizontalAlignment="Center">
 
-                <!-- Core Entities Section -->
                 <GroupBox Header="Core Entities" Margin="10" Padding="15">
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnCreateUser" Content="Create User" Width="150" Height="40" Margin="10" Click="BtnCreateUser_Click"/>
                         <Button Name="btnCreateClub" Content="Create Club" Width="150" Height="40" Margin="10" Click="BtnCreateClub_Click"/>
                         <Button Name="btnCreateMeet" Content="Create Meet" Width="150" Height="40" Margin="10" Click="BtnCreateMeet_Click"/>
                         <Button Name="btnCreateSwimmingPool" Content="Create Swimming Pool" Width="150" Height="40" Margin="10" Click="BtnCreateSwimmingPool_Click"/>
-                        <Button Name="btnCreateAddress" Content="Create Address" Width="150" Height="40" Margin="10" Click="BtnCreateAddress_Click"/>
                     </WrapPanel>
                 </GroupBox>
 
-                <!-- Functions Section -->
                 <GroupBox Header="Functions &amp; Assignments" Margin="10" Padding="15">
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnCreateFunction" Content="Create Function" Width="150" Height="40" Margin="10" Click="BtnCreateFunction_Click"/>
@@ -42,15 +37,13 @@
                         <Button Name="btnCreateMeetFunction" Content="Create Meet Function" Width="150" Height="40" Margin="10" Click="BtnCreateMeetFunction_Click"/>
                     </WrapPanel>
                 </GroupBox>
-
-                <!-- Jury Management Section -->
+                
                 <GroupBox Header="Jury Management" Margin="10" Padding="15">
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnCreateJurysMember" Content="Create Jurys Member" Width="150" Height="40" Margin="10" Click="BtnCreateJurysMember_Click"/>
                     </WrapPanel>
                 </GroupBox>
 
-                <!-- Actions Section -->
                 <GroupBox Header="Actions" Margin="10" Padding="15">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnRefresh" Content="Refresh Data" Width="120" Height="35" Margin="10" FontWeight="Bold" Click="BtnRefresh_Click"/>

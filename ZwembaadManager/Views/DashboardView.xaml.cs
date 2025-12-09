@@ -18,8 +18,7 @@ namespace ZwembaadManager.Views
     /// </summary>
     public partial class DashboardView : UserControl
     {
-        // Events to communicate with parent window
-        public event EventHandler<string>? CreateEntityRequested;
+        public event EventHandler<string>? OpenViewRequested;
         public event EventHandler? LogoutRequested;
         public event EventHandler? RefreshRequested;
 
@@ -28,60 +27,56 @@ namespace ZwembaadManager.Views
             InitializeComponent();
         }
 
-        // Core Entities Event Handlers
         private void BtnCreateUser_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "User");
+            OpenViewRequested?.Invoke(this, "CreateUser");
         }
 
         private void BtnCreateClub_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "Club");
+            OpenViewRequested?.Invoke(this, "CreateClub");
         }
 
         private void BtnCreateMeet_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "Meet");
+            OpenViewRequested?.Invoke(this, "CreateMeet");
         }
 
         private void BtnCreateSwimmingPool_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "SwimmingPool");
+            OpenViewRequested?.Invoke(this, "CreateSwimmingPool");
         }
 
         private void BtnCreateAddress_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "Address");
+            OpenViewRequested?.Invoke(this, "CreateAddress");
         }
 
-        // Functions Event Handlers
         private void BtnCreateFunction_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "Function");
+            OpenViewRequested?.Invoke(this, "CreateFunction");
         }
 
         private void BtnCreateFunctionAssignment_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "FunctionAssignment");
+            OpenViewRequested?.Invoke(this, "CreateFunctionAssignment");
         }
 
         private void BtnCreateUsersFunction_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "UsersFunction");
+            OpenViewRequested?.Invoke(this, "CreateUsersFunction");
         }
 
         private void BtnCreateMeetFunction_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "MeetFunction");
+            OpenViewRequested?.Invoke(this, "CreateMeetFunction");
         }
 
-        // Jury Management Event Handlers
         private void BtnCreateJurysMember_Click(object sender, RoutedEventArgs e)
         {
-            CreateEntityRequested?.Invoke(this, "JurysMember");
+            OpenViewRequested?.Invoke(this, "CreateJurysMember");
         }
 
-        // Action Event Handlers
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             RefreshRequested?.Invoke(this, EventArgs.Empty);
