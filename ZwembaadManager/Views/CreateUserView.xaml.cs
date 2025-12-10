@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZwembaadManager.Classes.Enum;
+using ZwembaadManager.Extensions;
 
 namespace ZwembaadManager.Views
 {
@@ -15,6 +19,16 @@ namespace ZwembaadManager.Views
         public CreateUserView()
         {
             InitializeComponent();
+            LoadGenderOptions();
+        }
+
+        private void LoadGenderOptions()
+        {
+            var genderOptions = Enum.GetValues<Gender>()
+                .Select(g => new { DisplayName = g.GetDisplayName(), Value = g })
+                .ToList();
+
+            cmbGender.ItemsSource = genderOptions;
         }
 
         private void BtnBackToDashboard_Click(object sender, RoutedEventArgs e)
@@ -65,6 +79,13 @@ namespace ZwembaadManager.Views
                 return false;
             }
 
+            if (cmbGender.SelectedItem == null)
+            {
+                MessageBox.Show("Gender is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                cmbGender.Focus();
+                return false;
+            }
+
             if (!string.IsNullOrWhiteSpace(txtClubId.Text) && !int.TryParse(txtClubId.Text, out _))
             {
                 MessageBox.Show("Club ID must be a valid number.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -84,8 +105,11 @@ namespace ZwembaadManager.Views
             txtClubId.Clear();
             txtLicense.Clear();
             txtCounty.Clear();
+            cmbGender.SelectedItem = null;
             
             txtFirstName.Focus();
         }
+
+        public Gender? SelectedGender => cmbGender.SelectedValue as Gender?;
     }
 }
