@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZwembaadManager.Classes.Enum;
+using ZwembaadManager.Extensions;
 
 namespace ZwembaadManager.Views
 {
@@ -15,6 +19,16 @@ namespace ZwembaadManager.Views
         public CreateSwimmingPoolView()
         {
             InitializeComponent();
+            LoadNumberOfLanesOptions();
+        }
+
+        private void LoadNumberOfLanesOptions()
+        {
+            var numberOfLanesOptions = Enum.GetValues<NumberOfLanes>()
+                .Select(lanes => new { DisplayName = lanes.GetDisplayName(), Value = lanes })
+                .ToList();
+
+            cmbNumberOfLanes.ItemsSource = numberOfLanesOptions;
         }
 
         private void BtnBackToDashboard_Click(object sender, RoutedEventArgs e)
@@ -59,17 +73,9 @@ namespace ZwembaadManager.Views
                 return false;
             }
 
-            string numberOfLanes = GetComboBoxValue(cmbNumberOfLanes);
-            if (string.IsNullOrWhiteSpace(numberOfLanes))
+            if (cmbNumberOfLanes.SelectedItem == null)
             {
                 MessageBox.Show("Number of Lanes is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                cmbNumberOfLanes.Focus();
-                return false;
-            }
-
-            if (!int.TryParse(numberOfLanes, out int lanesValue) || lanesValue <= 0)
-            {
-                MessageBox.Show("Number of Lanes must be a valid positive integer.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 cmbNumberOfLanes.Focus();
                 return false;
             }
@@ -89,8 +95,7 @@ namespace ZwembaadManager.Views
             txtName.Clear();
             cmbPoolLength.SelectedIndex = -1;
             cmbPoolLength.Text = string.Empty;
-            cmbNumberOfLanes.SelectedIndex = -1;
-            cmbNumberOfLanes.Text = string.Empty;
+            cmbNumberOfLanes.SelectedItem = null;
             txtAddressId.Clear();
             
             txtName.Focus();
@@ -104,5 +109,7 @@ namespace ZwembaadManager.Views
             }
             return comboBox.Text ?? string.Empty;
         }
+
+        public NumberOfLanes? SelectedNumberOfLanes => cmbNumberOfLanes.SelectedValue as NumberOfLanes?;
     }
 }

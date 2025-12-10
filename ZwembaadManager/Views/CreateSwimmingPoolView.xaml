@@ -51,13 +51,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Number of Lanes:" Grid.Column="0" VerticalAlignment="Center" FontWeight="Medium"/>
-                            <ComboBox Name="cmbNumberOfLanes" Grid.Column="1" Padding="8" FontSize="14" IsEditable="True">
-                                <ComboBoxItem Content="4"/>
-                                <ComboBoxItem Content="5"/>
-                                <ComboBoxItem Content="6"/>
-                                <ComboBoxItem Content="8"/>
-                                <ComboBoxItem Content="10"/>
-                            </ComboBox>
+                            <ComboBox Name="cmbNumberOfLanes" Grid.Column="1" Padding="8" FontSize="14" DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
                         </Grid>
                     </StackPanel>
                 </GroupBox>
