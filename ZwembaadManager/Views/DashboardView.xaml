@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="ZwembaadManager.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZwembaadManager.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" Width="966">
+
+    <Grid Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
+            <TextBlock Text="Zwembad Manager Dashboard" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <StackPanel Margin="20" HorizontalAlignment="Center">
+
+                <GroupBox Header="Core Entities" Margin="10" Padding="15">
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnCreateUser" Content="Create User" Width="150" Height="40" Margin="10" Click="BtnCreateUser_Click"/>
+                        <Button Name="btnCreateClub" Content="Create Club" Width="150" Height="40" Margin="10" Click="BtnCreateClub_Click"/>
+                        <Button Name="btnCreateMeet" Content="Create Meet" Width="150" Height="40" Margin="10" Click="BtnCreateMeet_Click"/>
+                        <Button Name="btnCreateSwimmingPool" Content="Create Swimming Pool" Width="150" Height="40" Margin="10" Click="BtnCreateSwimmingPool_Click"/>
+                    </WrapPanel>
+                </GroupBox>
+
+                <GroupBox Header="Functions &amp; Assignments" Margin="10" Padding="15">
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnCreateFunction" Content="Create Function" Width="150" Height="40" Margin="10" Click="BtnCreateFunction_Click"/>
+                        <Button Name="btnCreateFunctionAssignment" Content="Create Function Assignment" Width="150" Height="40" Margin="10" Click="BtnCreateFunctionAssignment_Click"/>
+                        <Button Name="btnCreateUsersFunction" Content="Create Users Function" Width="150" Height="40" Margin="10" Click="BtnCreateUsersFunction_Click"/>
+                        <Button Name="btnCreateMeetFunction" Content="Create Meet Function" Width="150" Height="40" Margin="10" Click="BtnCreateMeetFunction_Click"/>
+                    </WrapPanel>
+                </GroupBox>
+                
+                <GroupBox Header="Jury Management" Margin="10" Padding="15">
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnCreateJurysMember" Content="Create Jurys Member" Width="150" Height="40" Margin="10" Click="BtnCreateJurysMember_Click"/>
+                    </WrapPanel>
+                </GroupBox>
+
+                <GroupBox Header="Actions" Margin="10" Padding="15">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnRefresh" Content="Refresh Data" Width="120" Height="35" Margin="10" FontWeight="Bold" Click="BtnRefresh_Click"/>
+                        <Button Name="btnLogout" Content="Logout" Width="120" Height="35" Margin="10" FontWeight="Bold" Click="BtnLogout_Click"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
