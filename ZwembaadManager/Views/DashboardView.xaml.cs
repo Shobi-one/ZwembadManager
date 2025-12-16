@@ -72,6 +72,31 @@ namespace ZwembaadManager.Views
             OpenViewRequested?.Invoke(this, "CreateJurysMember");
         }
 
+        private void BtnViewUsers_Click(object sender, RoutedEventArgs e)
+        {
+            OpenViewRequested?.Invoke(this, "UsersList");
+        }
+
+        private void BtnViewClubs_Click(object sender, RoutedEventArgs e)
+        {
+            OpenViewRequested?.Invoke(this, "ClubsList");
+        }
+
+        private void BtnViewMeets_Click(object sender, RoutedEventArgs e)
+        {
+            OpenViewRequested?.Invoke(this, "MeetsList");
+        }
+
+        private void BtnViewSwimmingPools_Click(object sender, RoutedEventArgs e)
+        {
+            OpenViewRequested?.Invoke(this, "SwimmingPoolsList");
+        }
+
+        private void BtnViewFunctions_Click(object sender, RoutedEventArgs e)
+        {
+            OpenViewRequested?.Invoke(this, "FunctionsList");
+        }
+
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             RefreshRequested?.Invoke(this, EventArgs.Empty);

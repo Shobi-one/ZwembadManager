@@ -20,13 +20,18 @@ namespace ZwembaadManager
         private DashboardView? dashboardView;
         private CreateUserView? createUserView;
         private CreateClubView? createClubView;
+        private ClubsListView? clubsListView;
         private CreateMeetView? createMeetView;
         private CreateSwimmingPoolView? createSwimmingPoolView;
         private CreateFunctionView? createFunctionView;
         private CreateUsersFunctionView? createUsersFunctionView;
         private CreateMeetFunctionView? createMeetFunctionView;
         private CreateJurysMemberView? createJurysMemberView;
-
+        private MeetsListView? meetsListView;
+        private SwimmingPoolsListView? swimmingPoolsListView;
+        private FunctionsListView? functionsListView;
+        private UsersListView? usersListView;
+    
         public MainWindow()
         {
             InitializeComponent();
@@ -65,6 +70,9 @@ namespace ZwembaadManager
                 case "CreateClub":
                     ShowCreateClubView();
                     break;
+                case "ClubsList":
+                    ShowClubsListView();
+                    break;
                 case "CreateMeet":
                     ShowCreateMeetView();
                     break;
@@ -86,6 +94,18 @@ namespace ZwembaadManager
                 case "CreateAddress":
                     MessageBox.Show("Create Address view will be implemented soon.");
                     break;
+                case "MeetsList":
+                    ShowMeetsListView();
+                    break;
+                case "SwimmingPoolsList":
+                    ShowSwimmingPoolsListView();
+                    break;
+                case "FunctionsList":
+                    ShowFunctionsListView();
+                    break;
+                case "UsersList":
+                    ShowUsersListView();
+                    break;
                 default:
                     MessageBox.Show($"Unknown view type: {viewType}");
                     break;
@@ -106,6 +126,13 @@ namespace ZwembaadManager
             createClubView.BackToDashboardRequested += CreateView_BackToDashboardRequested;
             createClubView.ClubSaveRequested += CreateClubView_ClubSaveRequested;
             MainContentArea.Content = createClubView;
+        }
+
+        private void ShowClubsListView()
+        {
+            clubsListView = new ClubsListView();
+            clubsListView.BackRequested += CreateView_BackToDashboardRequested;
+            MainContentArea.Content = clubsListView;
         }
 
         private void ShowCreateMeetView()
@@ -154,6 +181,34 @@ namespace ZwembaadManager
             createJurysMemberView.BackToDashboardRequested += CreateView_BackToDashboardRequested;
             createJurysMemberView.JurysMemberSaveRequested += CreateJurysMemberView_JurysMemberSaveRequested;
             MainContentArea.Content = createJurysMemberView;
+        }
+
+        private void ShowMeetsListView()
+        {
+            meetsListView = new MeetsListView();
+            meetsListView.BackRequested += CreateView_BackToDashboardRequested;
+            MainContentArea.Content = meetsListView;
+        }
+
+        private void ShowSwimmingPoolsListView()
+        {
+            swimmingPoolsListView = new SwimmingPoolsListView();
+            swimmingPoolsListView.BackRequested += CreateView_BackToDashboardRequested;
+            MainContentArea.Content = swimmingPoolsListView;
+        }
+
+        private void ShowFunctionsListView()
+        {
+            functionsListView = new FunctionsListView();
+            functionsListView.BackRequested += CreateView_BackToDashboardRequested;
+            MainContentArea.Content = functionsListView;
+        }
+
+        private void ShowUsersListView()
+        {
+            usersListView = new UsersListView();
+            usersListView.BackRequested += CreateView_BackToDashboardRequested;
+            MainContentArea.Content = usersListView;
         }
 
         private void CreateView_BackToDashboardRequested(object? sender, EventArgs e)

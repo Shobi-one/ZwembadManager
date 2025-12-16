@@ -20,12 +20,22 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel Margin="20" HorizontalAlignment="Center">
 
-                <GroupBox Header="Core Entities" Margin="10" Padding="15">
+                <GroupBox Header="Core Entities - Create" Margin="10" Padding="15">
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnCreateUser" Content="Create User" Width="150" Height="40" Margin="10" Click="BtnCreateUser_Click"/>
                         <Button Name="btnCreateClub" Content="Create Club" Width="150" Height="40" Margin="10" Click="BtnCreateClub_Click"/>
                         <Button Name="btnCreateMeet" Content="Create Meet" Width="150" Height="40" Margin="10" Click="BtnCreateMeet_Click"/>
                         <Button Name="btnCreateSwimmingPool" Content="Create Swimming Pool" Width="150" Height="40" Margin="10" Click="BtnCreateSwimmingPool_Click"/>
+                    </WrapPanel>
+                </GroupBox>
+
+                <GroupBox Header="Core Entities - Manage" Margin="10" Padding="15">
+                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Name="btnViewUsers" Content="Manage Users" Width="150" Height="40" Margin="10" Click="BtnViewUsers_Click"/>
+                        <Button Name="btnViewClubs" Content="Manage Clubs" Width="150" Height="40" Margin="10" Click="BtnViewClubs_Click"/>
+                        <Button Name="btnViewMeets" Content="Manage Meets" Width="150" Height="40" Margin="10" Click="BtnViewMeets_Click"/>
+                        <Button Name="btnViewSwimmingPools" Content="Manage Swimming Pools" Width="150" Height="40" Margin="10" Click="BtnViewSwimmingPools_Click"/>
+                        <Button Name="btnViewFunctions" Content="Manage Functions" Width="150" Height="40" Margin="10" Click="BtnViewFunctions_Click"/>
                     </WrapPanel>
                 </GroupBox>
 

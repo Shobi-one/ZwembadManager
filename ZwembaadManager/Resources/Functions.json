@@ -47,19 +47,5 @@
     "Abbreviation": "SJ",
     "CreatedDate": "2024-01-01T00:00:00",
     "ModifiedDate": "2024-01-01T00:00:00"
-  },
-  {
-    "Id": 8,
-    "Name": "Announcer",
-    "Abbreviation": "ANN",
-    "CreatedDate": "2024-01-01T00:00:00",
-    "ModifiedDate": "2024-01-01T00:00:00"
-  },
-  {
-    "Id": 9,
-    "Name": "aa",
-    "Abbreviation": "test",
-    "CreatedDate": "2025-12-16T16:20:23.3381335+01:00",
-    "ModifiedDate": "2025-12-16T16:20:23.3381376+01:00"
   }
 ]
