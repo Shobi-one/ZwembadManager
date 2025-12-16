@@ -1,9 +1,12 @@
+using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZwembaadManager.Classes;
 using ZwembaadManager.Models;
+using ZwembaadManager.Classes.Enum;
 using System.Reflection;
 using System.Linq;
 
@@ -14,6 +17,8 @@ namespace ZwembaadManager.Services
         private readonly string _usersFilePath;
         private readonly string _clubsFilePath;
         private readonly string _meetsFilePath;
+        private readonly string _swimmingPoolsFilePath;
+        private readonly string _functionsFilePath;
         
         public JsonDataService()
         {
@@ -38,11 +43,15 @@ namespace ZwembaadManager.Services
             _usersFilePath = Path.Combine(resourcesPath, "Users.json");
             _clubsFilePath = Path.Combine(resourcesPath, "Clubs.json");
             _meetsFilePath = Path.Combine(resourcesPath, "Meets.json");
+            _swimmingPoolsFilePath = Path.Combine(resourcesPath, "SwimmingPools.json");
+            _functionsFilePath = Path.Combine(resourcesPath, "Functions.json");
             Directory.CreateDirectory(resourcesPath);
             
             InitializeUsersFileIfNeeded();
             InitializeClubsFileIfNeeded();
             InitializeMeetsFileIfNeeded();
+            InitializeSwimmingPoolsFileIfNeeded();
+            InitializeFunctionsFileIfNeeded();
         }
 
         private void InitializeUsersFileIfNeeded()
@@ -104,6 +113,48 @@ namespace ZwembaadManager.Services
                 else
                 {
                     File.WriteAllText(_meetsFilePath, "[]");
+                }
+            }
+        }
+
+        private void InitializeSwimmingPoolsFileIfNeeded()
+        {
+            if (!File.Exists(_swimmingPoolsFilePath))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "ZwembaadManager.Resources.SwimmingPools.json";
+                
+                using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream != null)
+                {
+                    using var reader = new StreamReader(stream);
+                    string content = reader.ReadToEnd();
+                    File.WriteAllText(_swimmingPoolsFilePath, content);
+                }
+                else
+                {
+                    File.WriteAllText(_swimmingPoolsFilePath, "[]");
+                }
+            }
+        }
+
+        private void InitializeFunctionsFileIfNeeded()
+        {
+            if (!File.Exists(_functionsFilePath))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "ZwembaadManager.Resources.Functions.json";
+                
+                using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream != null)
+                {
+                    using var reader = new StreamReader(stream);
+                    string content = reader.ReadToEnd();
+                    File.WriteAllText(_functionsFilePath, content);
+                }
+                else
+                {
+                    File.WriteAllText(_functionsFilePath, "[]");
                 }
             }
         }
@@ -300,9 +351,146 @@ namespace ZwembaadManager.Services
             await SaveMeetsAsync(meets);
         }
 
+        // SwimmingPool-related methods
+        public async Task<List<SwimmingPool>> LoadSwimmingPoolsAsync()
+        {
+            try
+            {
+                if (!File.Exists(_swimmingPoolsFilePath))
+                {
+                    return new List<SwimmingPool>();
+                }
+
+                string jsonContent = await File.ReadAllTextAsync(_swimmingPoolsFilePath);
+                var swimmingPools = JsonSerializer.Deserialize<List<SwimmingPool>>(jsonContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                });
+                
+                return swimmingPools ?? new List<SwimmingPool>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to load swimming pools: {ex.Message}", ex);
+            }
+        }
+
+        public async Task SaveSwimmingPoolsAsync(List<SwimmingPool> swimmingPools)
+        {
+            try
+            {
+                string jsonContent = JsonSerializer.Serialize(swimmingPools, new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Converters = { new JsonStringEnumConverter() }
+                });
+                
+                await File.WriteAllTextAsync(_swimmingPoolsFilePath, jsonContent);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to save swimming pools: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> GetNextSwimmingPoolIdAsync()
+        {
+            var swimmingPools = await LoadSwimmingPoolsAsync();
+            return swimmingPools.Count > 0 ? swimmingPools.Max(sp => sp.Id) + 1 : 1;
+        }
+
+        public async Task AddSwimmingPoolAsync(SwimmingPool newSwimmingPool)
+        {
+            var swimmingPools = await LoadSwimmingPoolsAsync();
+            
+            // Check for duplicates (same name)
+            var existingPool = swimmingPools.Find(sp => sp.Name.Equals(newSwimmingPool.Name, StringComparison.OrdinalIgnoreCase));
+            
+            if (existingPool != null)
+            {
+                throw new InvalidOperationException($"A swimming pool with the name '{newSwimmingPool.Name}' already exists.");
+            }
+
+            newSwimmingPool.Id = await GetNextSwimmingPoolIdAsync();
+            newSwimmingPool.CreatedDate = DateTime.Now;
+            newSwimmingPool.ModifiedDate = DateTime.Now;
+            
+            swimmingPools.Add(newSwimmingPool);
+            await SaveSwimmingPoolsAsync(swimmingPools);
+        }
+
+        // Function-related methods
+        public async Task<List<Function>> LoadFunctionsAsync()
+        {
+            try
+            {
+                if (!File.Exists(_functionsFilePath))
+                {
+                    return new List<Function>();
+                }
+
+                string jsonContent = await File.ReadAllTextAsync(_functionsFilePath);
+                var functions = JsonSerializer.Deserialize<List<Function>>(jsonContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                
+                return functions ?? new List<Function>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to load functions: {ex.Message}", ex);
+            }
+        }
+
+        public async Task SaveFunctionsAsync(List<Function> functions)
+        {
+            try
+            {
+                string jsonContent = JsonSerializer.Serialize(functions, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                
+                await File.WriteAllTextAsync(_functionsFilePath, jsonContent);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to save functions: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> GetNextFunctionIdAsync()
+        {
+            var functions = await LoadFunctionsAsync();
+            return functions.Count > 0 ? functions.Max(f => f.Id) + 1 : 1;
+        }
+
+        public async Task AddFunctionAsync(Function newFunction)
+        {
+            var functions = await LoadFunctionsAsync();
+            var existingFunction = functions.Find(f => f.Name.Equals(newFunction.Name, StringComparison.OrdinalIgnoreCase) ||
+                                                      f.Abbreviation.Equals(newFunction.Abbreviation, StringComparison.OrdinalIgnoreCase));
+            
+            if (existingFunction != null)
+            {
+                throw new InvalidOperationException($"A function with the name '{newFunction.Name}' or abbreviation '{newFunction.Abbreviation}' already exists.");
+            }
+
+            newFunction.Id = await GetNextFunctionIdAsync();
+            newFunction.CreatedDate = DateTime.Now;
+            newFunction.ModifiedDate = DateTime.Now;
+            
+            functions.Add(newFunction);
+            await SaveFunctionsAsync(functions);
+        }
+
         // File path getters
         public string GetUsersFilePath() => _usersFilePath;
         public string GetClubsFilePath() => _clubsFilePath;
         public string GetMeetsFilePath() => _meetsFilePath;
+        public string GetSwimmingPoolsFilePath() => _swimmingPoolsFilePath;
+        public string GetFunctionsFilePath() => _functionsFilePath;
     }
 }

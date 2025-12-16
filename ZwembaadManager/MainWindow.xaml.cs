@@ -10,6 +10,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZwembaadManager.Views;
 using ZwembaadManager.Events;
+using ZwembaadManager.Extensions;
 
 namespace ZwembaadManager
 {
@@ -181,16 +182,16 @@ namespace ZwembaadManager
             ShowDashboard();
         }
 
-        private void CreateSwimmingPoolView_SwimmingPoolSaveRequested(object? sender, EventArgs e)
+        private void CreateSwimmingPoolView_SwimmingPoolSaveRequested(object? sender, SwimmingPoolSavedEventArgs e)
         {
-            MessageBox.Show("Swimming Pool saved successfully! (This will connect to data storage later)", 
+            MessageBox.Show($"Swimming Pool '{e.SavedSwimmingPool.Name}' ({e.SavedSwimmingPool.PoolLength}m, {e.SavedSwimmingPool.NumberOfLanes.GetDisplayName()} lanes) has been successfully saved to the JSON file!", 
                           "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowDashboard();
         }
 
-        private void CreateFunctionView_FunctionSaveRequested(object? sender, EventArgs e)
+        private void CreateFunctionView_FunctionSaveRequested(object? sender, FunctionSavedEventArgs e)
         {
-            MessageBox.Show("Function saved successfully! (This will connect to data storage later)", 
+            MessageBox.Show($"Function '{e.SavedFunction.Name}' (Abbreviation: '{e.SavedFunction.Abbreviation}') has been successfully saved to the JSON file!", 
                           "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowDashboard();
         }

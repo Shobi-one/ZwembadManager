@@ -1,6 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using ZwembaadManager.Events;
+using ZwembaadManager.Models;
+using ZwembaadManager.Services;
 
 namespace ZwembaadManager.Views
 {
@@ -9,12 +12,15 @@ namespace ZwembaadManager.Views
     /// </summary>
     public partial class CreateFunctionView : UserControl
     {
+        private readonly JsonDataService _dataService;
+
         public event EventHandler? BackToDashboardRequested;
-        public event EventHandler? FunctionSaveRequested;
+        public event EventHandler<FunctionSavedEventArgs>? FunctionSaveRequested;
 
         public CreateFunctionView()
         {
             InitializeComponent();
+            _dataService = new JsonDataService();
         }
 
         private void BtnBackToDashboard_Click(object sender, RoutedEventArgs e)
@@ -22,11 +28,47 @@ namespace ZwembaadManager.Views
             BackToDashboardRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             if (ValidateForm())
             {
-                FunctionSaveRequested?.Invoke(this, EventArgs.Empty);
+                try
+                {
+                    // Disable the save button to prevent multiple clicks
+                    btnSave.IsEnabled = false;
+                    btnSave.Content = "Saving...";
+
+                    // Create new function object
+                    var function = new Function(
+                        txtName.Text.Trim(),
+                        txtAbbreviation.Text.Trim()
+                    );
+
+                    // Save to JSON file using JsonDataService
+                    await _dataService.AddFunctionAsync(function);
+
+                    // Show debug info (remove this in production)
+                    MessageBox.Show($"Function saved to: {_dataService.GetFunctionsFilePath()}", 
+                                  "Debug Info", 
+                                  MessageBoxButton.OK, 
+                                  MessageBoxImage.Information);
+
+                    // Raise the event with the saved function
+                    FunctionSaveRequested?.Invoke(this, new FunctionSavedEventArgs(function));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving function: {ex.Message}", 
+                                  "Save Error", 
+                                  MessageBoxButton.OK, 
+                                  MessageBoxImage.Error);
+                }
+                finally
+                {
+                    // Re-enable the save button
+                    btnSave.IsEnabled = true;
+                    btnSave.Content = "Save Function";
+                }
             }
         }
 
@@ -65,7 +107,6 @@ namespace ZwembaadManager.Views
         {
             txtName.Clear();
             txtAbbreviation.Clear();
-            
             txtName.Focus();
         }
     }

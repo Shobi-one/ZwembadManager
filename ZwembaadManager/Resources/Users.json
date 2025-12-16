@@ -130,5 +130,17 @@
     "Mobile": "047283593",
     "KeycloakGroups": "M",
     "IsActive": true
+  },
+  {
+    "Id": 12,
+    "ClubId": 1,
+    "FirstName": "Obi",
+    "LastName": "Verheyen",
+    "License": "YEs",
+    "County": "Oost-vlaanderen",
+    "Email": "obiverheyen@gmail.com",
+    "Mobile": "047283593",
+    "KeycloakGroups": "X",
+    "IsActive": true
   }
 ]

@@ -1,52 +1,65 @@
 [
-    {
-        "Id": 1,
-        "Name": "Product/process development scientist",
-        "Abbreviation": "FP"
-    },
-    {
-        "Id": 2,
-        "Name": "Engineer, production",
-        "Abbreviation": "XF"
-    },
-    {
-        "Id": 3,
-        "Name": "Immunologist",
-        "Abbreviation": "RJ"
-    },
-    {
-        "Id": 4,
-        "Name": "Waste management officer",
-        "Abbreviation": "GM"
-    },
-    {
-        "Id": 5,
-        "Name": "Risk manager",
-        "Abbreviation": "SU"
-    },
-    {
-        "Id": 6,
-        "Name": "Naval architect",
-        "Abbreviation": "CI"
-    },
-    {
-        "Id": 7,
-        "Name": "Photographer",
-        "Abbreviation": "HB"
-    },
-    {
-        "Id": 8,
-        "Name": "Tourist information centre manager",
-        "Abbreviation": "OJ"
-    },
-    {
-        "Id": 9,
-        "Name": "Land/geomatics surveyor",
-        "Abbreviation": "SF"
-    },
-    {
-        "Id": 10,
-        "Name": "Futures trader",
-        "Abbreviation": "CU"
-    }
+  {
+    "Id": 1,
+    "Name": "Referee",
+    "Abbreviation": "REF",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 2,
+    "Name": "Timekeeper",
+    "Abbreviation": "TK",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 3,
+    "Name": "Starter",
+    "Abbreviation": "START",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 4,
+    "Name": "Judge Inspector",
+    "Abbreviation": "JI",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 5,
+    "Name": "Lane Judge",
+    "Abbreviation": "LJ",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 6,
+    "Name": "Turn Judge",
+    "Abbreviation": "TJ",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 7,
+    "Name": "Stroke Judge",
+    "Abbreviation": "SJ",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 8,
+    "Name": "Announcer",
+    "Abbreviation": "ANN",
+    "CreatedDate": "2024-01-01T00:00:00",
+    "ModifiedDate": "2024-01-01T00:00:00"
+  },
+  {
+    "Id": 9,
+    "Name": "aa",
+    "Abbreviation": "test",
+    "CreatedDate": "2025-12-16T16:20:23.3381335+01:00",
+    "ModifiedDate": "2025-12-16T16:20:23.3381376+01:00"
+  }
 ]
