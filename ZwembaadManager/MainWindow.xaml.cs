@@ -171,9 +171,9 @@ namespace ZwembaadManager
             ShowDashboard();
         }
 
-        private void CreateUserView_UserSaveRequested(object? sender, EventArgs e)
+        private void CreateUserView_UserSaveRequested(object? sender, UserSavedEventArgs e)
         {
-            MessageBox.Show("User saved successfully! (This will connect to data storage later)", 
+            MessageBox.Show($"User '{e.SavedUser.FirstName} {e.SavedUser.LastName}' has been successfully saved to the JSON file!", 
                           "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowDashboard();
         }

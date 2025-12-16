@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ZwembaadManager.Classes;
 using ZwembaadManager.Classes.Enum;
 using ZwembaadManager.Extensions;
+using ZwembaadManager.Services;
 
 namespace ZwembaadManager.Views
 {
@@ -14,11 +16,14 @@ namespace ZwembaadManager.Views
     public partial class CreateUserView : UserControl
     {
         public event EventHandler? BackToDashboardRequested;
-        public event EventHandler? UserSaveRequested;
+        public event EventHandler<UserSavedEventArgs>? UserSaveRequested;
+
+        private readonly JsonDataService _dataService;
 
         public CreateUserView()
         {
             InitializeComponent();
+            _dataService = new JsonDataService();
             LoadGenderOptions();
         }
 
@@ -36,12 +41,55 @@ namespace ZwembaadManager.Views
             BackToDashboardRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             if (ValidateForm())
             {
-                UserSaveRequested?.Invoke(this, EventArgs.Empty);
+                try
+                {
+
+                    btnSave.IsEnabled = false;
+                    btnSave.Content = "Saving...";
+                    var newUser = CreateUserFromForm();
+
+                    await _dataService.AddUserAsync(newUser);
+                    UserSaveRequested?.Invoke(this, new UserSavedEventArgs { SavedUser = newUser });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving user: {ex.Message}", "Save Error", 
+                                  MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    btnSave.IsEnabled = true;
+                    btnSave.Content = "Save User";
+                }
             }
+        }
+
+        private User CreateUserFromForm()
+        {
+            var user = new User
+            {
+                FirstName = txtFirstName.Text.Trim(),
+                LastName = txtLastName.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Mobile = txtMobile.Text.Trim(),
+                License = txtLicense.Text.Trim(),
+                County = txtCounty.Text.Trim(),
+                IsActive = true
+            };
+
+            if (!string.IsNullOrWhiteSpace(txtClubId.Text) && int.TryParse(txtClubId.Text, out int clubId))
+            {
+                user.ClubId = clubId;
+            }
+
+            if (SelectedGender.HasValue)
+            {
+                user.KeycloakGroups = SelectedGender.Value.ToString();
+            }
+
+            return user;
         }
 
         private void BtnClear_Click(object sender, RoutedEventArgs e)
@@ -106,10 +154,18 @@ namespace ZwembaadManager.Views
             txtLicense.Clear();
             txtCounty.Clear();
             cmbGender.SelectedItem = null;
+
+            btnSave.IsEnabled = true;
+            btnSave.Content = "Save User";
             
             txtFirstName.Focus();
         }
 
         public Gender? SelectedGender => cmbGender.SelectedValue as Gender?;
+    }
+
+    public class UserSavedEventArgs : EventArgs
+    {
+        public User SavedUser { get; set; } = null!;
     }
 }

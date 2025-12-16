@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZwembaadManager"
         mc:Ignorable="d"
-        Title="Zwembaad Manager" Height="450" Width="800">
+        Title="Zwembaad Manager" 
+        Height="600" Width="1000"
+        WindowState="Normal"
+        ResizeMode="CanResize">
     <Grid>
         <ContentControl x:Name="MainContentArea"/>
     </Grid>
