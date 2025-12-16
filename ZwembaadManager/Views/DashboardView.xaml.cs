@@ -57,11 +57,6 @@ namespace ZwembaadManager.Views
             OpenViewRequested?.Invoke(this, "CreateFunction");
         }
 
-        private void BtnCreateFunctionAssignment_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateFunctionAssignment");
-        }
-
         private void BtnCreateUsersFunction_Click(object sender, RoutedEventArgs e)
         {
             OpenViewRequested?.Invoke(this, "CreateUsersFunction");

@@ -32,7 +32,6 @@
                 <GroupBox Header="Functions &amp; Assignments" Margin="10" Padding="15">
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="btnCreateFunction" Content="Create Function" Width="150" Height="40" Margin="10" Click="BtnCreateFunction_Click"/>
-                        <Button Name="btnCreateFunctionAssignment" Content="Create Function Assignment" Width="150" Height="40" Margin="10" Click="BtnCreateFunctionAssignment_Click"/>
                         <Button Name="btnCreateUsersFunction" Content="Create Users Function" Width="150" Height="40" Margin="10" Click="BtnCreateUsersFunction_Click"/>
                         <Button Name="btnCreateMeetFunction" Content="Create Meet Function" Width="150" Height="40" Margin="10" Click="BtnCreateMeetFunction_Click"/>
                     </WrapPanel>

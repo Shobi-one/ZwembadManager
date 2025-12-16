@@ -12,7 +12,6 @@
   <ItemGroup>
     <None Remove="Resources\Addresses.json" />
     <None Remove="Resources\Clubs.json" />
-    <None Remove="Resources\FunctionAssignments.json" />
     <None Remove="Resources\Functions.json" />
     <None Remove="Resources\JurysMembers.json" />
     <None Remove="Resources\MeetFunctions.json" />
@@ -25,7 +24,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Addresses.json" />
     <EmbeddedResource Include="Resources\Clubs.json" />
-    <EmbeddedResource Include="Resources\FunctionAssignments.json" />
     <EmbeddedResource Include="Resources\Functions.json" />
     <EmbeddedResource Include="Resources\JurysMembers.json" />
     <EmbeddedResource Include="Resources\MeetFunctions.json" />

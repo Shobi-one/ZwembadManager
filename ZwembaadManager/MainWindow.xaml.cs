@@ -21,7 +21,6 @@ namespace ZwembaadManager
         private CreateMeetView? createMeetView;
         private CreateSwimmingPoolView? createSwimmingPoolView;
         private CreateFunctionView? createFunctionView;
-        private CreateFunctionAssignmentView? createFunctionAssignmentView;
         private CreateUsersFunctionView? createUsersFunctionView;
         private CreateMeetFunctionView? createMeetFunctionView;
         private CreateJurysMemberView? createJurysMemberView;
@@ -72,9 +71,6 @@ namespace ZwembaadManager
                     break;
                 case "CreateFunction":
                     ShowCreateFunctionView();
-                    break;
-                case "CreateFunctionAssignment":
-                    ShowCreateFunctionAssignmentView();
                     break;
                 case "CreateUsersFunction":
                     ShowCreateUsersFunctionView();
@@ -132,14 +128,6 @@ namespace ZwembaadManager
             createFunctionView.BackToDashboardRequested += CreateView_BackToDashboardRequested;
             createFunctionView.FunctionSaveRequested += CreateFunctionView_FunctionSaveRequested;
             MainContentArea.Content = createFunctionView;
-        }
-
-        private void ShowCreateFunctionAssignmentView()
-        {
-            createFunctionAssignmentView = new CreateFunctionAssignmentView();
-            createFunctionAssignmentView.BackToDashboardRequested += CreateView_BackToDashboardRequested;
-            createFunctionAssignmentView.FunctionAssignmentSaveRequested += CreateFunctionAssignmentView_FunctionAssignmentSaveRequested;
-            MainContentArea.Content = createFunctionAssignmentView;
         }
 
         private void ShowCreateUsersFunctionView()
