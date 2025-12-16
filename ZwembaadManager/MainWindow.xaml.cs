@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZwembaadManager.Views;
+using ZwembaadManager.Events;
 
 namespace ZwembaadManager
 {
@@ -166,16 +167,16 @@ namespace ZwembaadManager
             ShowDashboard();
         }
 
-        private void CreateClubView_ClubSaveRequested(object? sender, EventArgs e)
+        private void CreateClubView_ClubSaveRequested(object? sender, ClubSavedEventArgs e)
         {
-            MessageBox.Show("Club saved successfully! (This will connect to data storage later)", 
+            MessageBox.Show($"Club '{e.SavedClub.Name}' (Abbreviation: '{e.SavedClub.Abbreviation}') has been successfully saved to the JSON file!", 
                           "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowDashboard();
         }
 
-        private void CreateMeetView_MeetSaveRequested(object? sender, EventArgs e)
+        private void CreateMeetView_MeetSaveRequested(object? sender, MeetSavedEventArgs e)
         {
-            MessageBox.Show("Meet saved successfully! (This will connect to data storage later)", 
+            MessageBox.Show($"Meet '{e.SavedMeet.Name}' on {e.SavedMeet.Date:yyyy-MM-dd} ({e.SavedMeet.PartOfTheDay}) has been successfully saved to the JSON file!", 
                           "Save Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             ShowDashboard();
         }
