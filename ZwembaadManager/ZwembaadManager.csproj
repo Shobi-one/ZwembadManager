@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+    <Folder Include="Views\CreateViews\" />
   </ItemGroup>
 
 </Project>
