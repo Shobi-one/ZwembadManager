@@ -7,7 +7,6 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!-- Wave Background -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                 <GradientStop Color="#87CEEB" Offset="0"/>
@@ -16,10 +15,8 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <!-- Animated Wave Layers - Scaled to window -->
         <Viewbox Stretch="Fill" VerticalAlignment="Bottom">
             <Canvas Width="1200" Height="600" ClipToBounds="True">
-                <!-- Wave 1 (Bottom) - Seamless Loop -->
                 <Path Fill="#40FFFFFF" Opacity="0.3">
                     <Path.Data>
                         <PathGeometry>
@@ -52,7 +49,6 @@
                     </Path.Triggers>
                 </Path>
 
-                <!-- Wave 2 (Middle) - Seamless Loop -->
                 <Path Fill="#50FFFFFF" Opacity="0.25">
                     <Path.Data>
                         <PathGeometry>
@@ -61,7 +57,9 @@
                                 <BezierSegment Point1="500,270" Point2="625,370" Point3="750,320"/>
                                 <BezierSegment Point1="875,270" Point2="1000,370" Point3="1125,320"/>
                                 <BezierSegment Point1="1250,270" Point2="1375,370" Point3="1500,320"/>
-                                <LineSegment Point="1500,600"/>
+                                <BezierSegment Point1="1625,270" Point2="1750,370" Point3="1875,320"/>
+                                <BezierSegment Point1="2000,270" Point2="2125,370" Point3="2250,320"/>
+                                <LineSegment Point="2250,600"/>
                                 <LineSegment Point="0,600"/>
                             </PathFigure>
                         </PathGeometry>
@@ -84,7 +82,6 @@
                     </Path.Triggers>
                 </Path>
 
-                <!-- Wave 3 (Top) - Seamless Loop FIXED -->
                 <Path Fill="#60FFFFFF" Opacity="0.2">
                     <Path.Data>
                         <PathGeometry>
@@ -94,7 +91,9 @@
                                 <BezierSegment Point1="1050,290" Point2="1200,390" Point3="1350,340"/>
                                 <BezierSegment Point1="1500,290" Point2="1650,390" Point3="1800,340"/>
                                 <BezierSegment Point1="1950,290" Point2="2100,390" Point3="2250,340"/>
-                                <LineSegment Point="2250,600"/>
+                                <BezierSegment Point1="2400,290" Point2="2550,390" Point3="2700,340"/>
+                                <BezierSegment Point1="2850,290" Point2="3000,390" Point3="3150,340"/>
+                                <LineSegment Point="3150,600"/>
                                 <LineSegment Point="0,600"/>
                             </PathFigure>
                         </PathGeometry>
@@ -119,7 +118,457 @@
             </Canvas>
         </Viewbox>
 
-        <!-- Login Form - Centered and Responsive -->
+        <Viewbox Stretch="Fill">
+            <Canvas Width="800" Height="450" ClipToBounds="True">
+                <Grid Canvas.Left="120" Canvas.Top="400" Width="60" Height="60">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#D0FFFFFF" Offset="0"/>
+                                <GradientStop Color="#90E0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#5087CEEB" Offset="0.65"/>
+                                <GradientStop Color="#2087CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,5,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#F0FFFFFF" Offset="0"/>
+                                <GradientStop Color="#80FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble1Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble1Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-500"
+                                                   Duration="0:0:7"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble1Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="30"
+                                                   Duration="0:0:3.5"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="300" Canvas.Top="420" Width="40" Height="40">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#D5FFFFFF" Offset="0"/>
+                                <GradientStop Color="#95E0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#5587CEEB" Offset="0.65"/>
+                                <GradientStop Color="#2587CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,3,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#F5FFFFFF" Offset="0"/>
+                                <GradientStop Color="#85FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble2Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble2Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-520"
+                                                   Duration="0:0:9"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble2Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-20"
+                                                   Duration="0:0:4"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="500" Canvas.Top="410" Width="25" Height="25">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#DAFFFFFF" Offset="0"/>
+                                <GradientStop Color="#9AE0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#6087CEEB" Offset="0.65"/>
+                                <GradientStop Color="#3087CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="12" Height="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,2,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FAFFFFFF" Offset="0"/>
+                                <GradientStop Color="#8AFFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble3Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble3Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-480"
+                                                   Duration="0:0:6"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble3Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="15"
+                                                   Duration="0:0:2.5"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+                
+                <Grid Canvas.Left="680" Canvas.Top="430" Width="35" Height="35">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#D3FFFFFF" Offset="0"/>
+                                <GradientStop Color="#93E0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#5387CEEB" Offset="0.65"/>
+                                <GradientStop Color="#2387CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="17" Height="17" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,3,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#F3FFFFFF" Offset="0"/>
+                                <GradientStop Color="#83FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble4Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble4Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-510"
+                                                   Duration="0:0:8"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble4Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-25"
+                                                   Duration="0:0:3"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="200" Canvas.Top="400" Width="18" Height="18">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#DDFFFFFF" Offset="0"/>
+                                <GradientStop Color="#9DE0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#6387CEEB" Offset="0.65"/>
+                                <GradientStop Color="#3387CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="9" Height="9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,1,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FCFFFFFF" Offset="0"/>
+                                <GradientStop Color="#8CFFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble5Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble5Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-460"
+                                                   Duration="0:0:5"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble5Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="10"
+                                                   Duration="0:0:2"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="730" Canvas.Top="415" Width="55" Height="55">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#CEFFFFFF" Offset="0"/>
+                                <GradientStop Color="#8EE0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#4E87CEEB" Offset="0.65"/>
+                                <GradientStop Color="#1E87CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="28" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,5,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#EEFFFFFF" Offset="0"/>
+                                <GradientStop Color="#7EFFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble6Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble6Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-530"
+                                                   Duration="0:0:10"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble6Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="35"
+                                                   Duration="0:0:4.5"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="420" Canvas.Top="425" Width="28" Height="28">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#D7FFFFFF" Offset="0"/>
+                                <GradientStop Color="#97E0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#5787CEEB" Offset="0.65"/>
+                                <GradientStop Color="#2787CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="14" Height="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,2,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#F7FFFFFF" Offset="0"/>
+                                <GradientStop Color="#87FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble7Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble7Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-495"
+                                                   Duration="0:0:6.5"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble7Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-18"
+                                                   Duration="0:0:3"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="600" Canvas.Top="405" Width="20" Height="20">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#DBFFFFFF" Offset="0"/>
+                                <GradientStop Color="#9BE0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#6187CEEB" Offset="0.65"/>
+                                <GradientStop Color="#3187CEEB" Offset="0.85"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="10" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,1,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FBFFFFFF" Offset="0"/>
+                                <GradientStop Color="#8BFFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble8Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble8Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-470"
+                                                   Duration="0:0:5.5"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble8Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="12"
+                                                   Duration="0:0:2.2"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="50" Canvas.Top="405" Width="15" Height="15">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#DFFFFFFF" Offset="0"/>
+                                <GradientStop Color="#9FE0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#6587CEEB" Offset="0.65"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="7" Height="7" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,1,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#FFFFFFFF" Offset="0"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble9Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble9Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-450"
+                                                   Duration="0:0:4.5"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble9Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="8"
+                                                   Duration="0:0:1.8"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+
+                <Grid Canvas.Left="380" Canvas.Top="415" Width="22" Height="22">
+                    <Ellipse>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.35,0.35" RadiusX="0.8" RadiusY="0.8">
+                                <GradientStop Color="#D9FFFFFF" Offset="0"/>
+                                <GradientStop Color="#99E0F7FF" Offset="0.3"/>
+                                <GradientStop Color="#5987CEEB" Offset="0.65"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Ellipse Width="11" Height="11" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#F9FFFFFF" Offset="0"/>
+                                <GradientStop Color="#89FFFFFF" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Grid.RenderTransform>
+                        <TranslateTransform x:Name="bubble10Translate"/>
+                    </Grid.RenderTransform>
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="bubble10Translate"
+                                                   Storyboard.TargetProperty="Y"
+                                                   From="0" To="-475"
+                                                   Duration="0:0:5.8"
+                                                   RepeatBehavior="Forever"/>
+                                    <DoubleAnimation Storyboard.TargetName="bubble10Translate"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-12"
+                                                   Duration="0:0:2.4"
+                                                   AutoReverse="True"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                </Grid>
+            </Canvas>
+        </Viewbox>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -154,7 +603,6 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Header -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30">
                         <TextBlock Text="🏊‍" FontSize="32" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         <TextBlock Text="Zwembaad Manager"
@@ -164,7 +612,6 @@
                                    VerticalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Username -->
                     <StackPanel Grid.Row="1" Margin="0,0,0,15">
                         <Label Content="Gebruikersnaam:"
                                FontWeight="SemiBold"
@@ -178,7 +625,6 @@
                                  BorderThickness="1"/>
                     </StackPanel>
 
-                    <!-- Password -->
                     <StackPanel Grid.Row="2" Margin="0,0,0,25">
                         <Label Content="Wachtwoord:"
                                FontWeight="SemiBold"
@@ -191,7 +637,6 @@
                                      BorderThickness="1"/>
                     </StackPanel>
 
-                    <!-- Login Button -->
                     <Button Grid.Row="3"
                             x:Name="btnLogin"
                             Content="Inloggen"
@@ -213,7 +658,6 @@
                         </Button.Style>
                     </Button>
 
-                    <!-- Footer -->
                     <TextBlock Grid.Row="4"
                                Text="© 2025 Zwembaad Manager"
                                FontSize="10"
