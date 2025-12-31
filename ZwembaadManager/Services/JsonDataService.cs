@@ -333,8 +333,6 @@ namespace ZwembaadManager.Services
         public async Task AddMeetAsync(Meet newMeet)
         {
             var meets = await LoadMeetsAsync();
-            
-            // Check for duplicates (same name on same date)
             var existingMeet = meets.Find(m => m.Name.Equals(newMeet.Name, StringComparison.OrdinalIgnoreCase) &&
                                               m.Date.Date == newMeet.Date.Date);
             
@@ -351,7 +349,6 @@ namespace ZwembaadManager.Services
             await SaveMeetsAsync(meets);
         }
 
-        // SwimmingPool-related methods
         public async Task<List<SwimmingPool>> LoadSwimmingPoolsAsync()
         {
             try

@@ -94,29 +94,5 @@
     "Mobile": "\u002B32449 986111",
     "KeycloakGroups": "User",
     "IsActive": true
-  },
-  {
-    "Id": 9,
-    "ClubId": 4,
-    "FirstName": "Lori",
-    "LastName": "Vang",
-    "License": "LIC718",
-    "County": "Waals-Brabant",
-    "Email": "lesliegonzalez@mitchell.com",
-    "Mobile": "(075) 7746563",
-    "KeycloakGroups": "User",
-    "IsActive": false
-  },
-  {
-    "Id": 10,
-    "ClubId": 4,
-    "FirstName": "Dale",
-    "LastName": "Kline",
-    "License": "LIC078",
-    "County": "Namen",
-    "Email": "fallen@hotmail.com",
-    "Mobile": "\u002B3209-2340128",
-    "KeycloakGroups": "User",
-    "IsActive": false
   }
 ]
