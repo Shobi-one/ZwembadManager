@@ -440,7 +440,8 @@
 
                         <UniformGrid Columns="4" Rows="1">
                             <!-- Create User -->
-                            <Button Name="btnCreateUser" 
+                            <Button Name="btnCreateUser"
+                                    Click="BtnCreateUser_Click"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="110">
                                 <StackPanel>
