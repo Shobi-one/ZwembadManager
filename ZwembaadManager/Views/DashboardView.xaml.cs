@@ -97,11 +97,6 @@ namespace ZwembaadManager.Views
             OpenViewRequested?.Invoke(this, "FunctionsList");
         }
 
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshRequested?.Invoke(this, EventArgs.Empty);
-        }
-
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             LogoutRequested?.Invoke(this, EventArgs.Empty);
