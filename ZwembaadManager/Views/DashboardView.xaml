@@ -5,60 +5,653 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZwembaadManager.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600" Width="966">
+             d:DesignHeight="600" d:DesignWidth="966">
 
-    <Grid Margin="10,10,10,10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <!-- Aero Glass Button Style -->
+        <Style x:Key="AeroGlassButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#003366"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#4682B4" 
+                                                  Direction="270" 
+                                                  ShadowDepth="1" 
+                                                  Opacity="0.15" 
+                                                  BlurRadius="4"/>
+                            </Border.Effect>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20" HorizontalAlignment="Center">
-            <TextBlock Text="Zwembad Manager Dashboard" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
-        </StackPanel>
+                            <Grid>
+                                <!-- Main Glass Surface -->
+                                <Border x:Name="MainBorder"
+                                        CornerRadius="6"
+                                        BorderThickness="1"
+                                        BorderBrush="#40FFFFFF"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#F5FBFEFF" Offset="0"/>
+                                            <GradientStop Color="#EAF4F9FF" Offset="0.5"/>
+                                            <GradientStop Color="#E0EFF7FF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <StackPanel Margin="20" HorizontalAlignment="Center">
+                                    <!-- Subtle Glass Highlight -->
+                                    <Border CornerRadius="5" 
+                                            BorderThickness="0">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,0.3">
+                                                <GradientStop Color="#40FFFFFF" Offset="0"/>
+                                                <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
 
-                <GroupBox Header="Core Entities - Create" Margin="10" Padding="15">
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Name="btnCreateUser" Content="Create User" Width="150" Height="40" Margin="10" Click="BtnCreateUser_Click"/>
-                        <Button Name="btnCreateClub" Content="Create Club" Width="150" Height="40" Margin="10" Click="BtnCreateClub_Click"/>
-                        <Button Name="btnCreateMeet" Content="Create Meet" Width="150" Height="40" Margin="10" Click="BtnCreateMeet_Click"/>
-                        <Button Name="btnCreateSwimmingPool" Content="Create Swimming Pool" Width="150" Height="40" Margin="10" Click="BtnCreateSwimmingPool_Click"/>
-                    </WrapPanel>
-                </GroupBox>
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"
+                                                          TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Border>
 
-                <GroupBox Header="Core Entities - Manage" Margin="10" Padding="15">
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Name="btnViewUsers" Content="Manage Users" Width="150" Height="40" Margin="10" Click="BtnViewUsers_Click"/>
-                        <Button Name="btnViewClubs" Content="Manage Clubs" Width="150" Height="40" Margin="10" Click="BtnViewClubs_Click"/>
-                        <Button Name="btnViewMeets" Content="Manage Meets" Width="150" Height="40" Margin="10" Click="BtnViewMeets_Click"/>
-                        <Button Name="btnViewSwimmingPools" Content="Manage Swimming Pools" Width="150" Height="40" Margin="10" Click="BtnViewSwimmingPools_Click"/>
-                        <Button Name="btnViewFunctions" Content="Manage Functions" Width="150" Height="40" Margin="10" Click="BtnViewFunctions_Click"/>
-                    </WrapPanel>
-                </GroupBox>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FAFDFEFF" Offset="0"/>
+                                            <GradientStop Color="#F0F8FCFF" Offset="0.5"/>
+                                            <GradientStop Color="#E8F4FAFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#60FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#E0EFF7FF" Offset="0"/>
+                                            <GradientStop Color="#D5E9F4FF" Offset="0.5"/>
+                                            <GradientStop Color="#CCE3F0FF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                <GroupBox Header="Functions &amp; Assignments" Margin="10" Padding="15">
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Name="btnCreateFunction" Content="Create Function" Width="150" Height="40" Margin="10" Click="BtnCreateFunction_Click"/>
-                        <Button Name="btnCreateUsersFunction" Content="Create Users Function" Width="150" Height="40" Margin="10" Click="BtnCreateUsersFunction_Click"/>
-                        <Button Name="btnCreateMeetFunction" Content="Create Meet Function" Width="150" Height="40" Margin="10" Click="BtnCreateMeetFunction_Click"/>
-                    </WrapPanel>
-                </GroupBox>
-                
-                <GroupBox Header="Jury Management" Margin="10" Padding="15">
-                    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Name="btnCreateJurysMember" Content="Create Jurys Member" Width="150" Height="40" Margin="10" Click="BtnCreateJurysMember_Click"/>
-                    </WrapPanel>
-                </GroupBox>
+        <!-- Aero Action Button (More Prominent) -->
+        <Style x:Key="AeroActionButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="22,10"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="DarkBlue"/>
+            <Setter Property="BorderBrush" Value="DarkBlue"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="Blue"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#003399"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                <GroupBox Header="Actions" Margin="10" Padding="15">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Name="btnRefresh" Content="Refresh Data" Width="120" Height="35" Margin="10" FontWeight="Bold" Click="BtnRefresh_Click"/>
-                        <Button Name="btnLogout" Content="Logout" Width="120" Height="35" Margin="10" FontWeight="Bold" Click="BtnLogout_Click"/>
+        <!-- Danger Button (Red Aero Glass) -->
+        <Style x:Key="AeroDangerButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="22,10"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="BorderBrush" Value="#E74C3C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EF5C4C"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#87CEEB" Offset="0"/>
+                <GradientStop Color="#4682B4" Offset="0.5"/>
+                <GradientStop Color="#1E90FF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Viewbox Stretch="Fill" VerticalAlignment="Bottom">
+            <Canvas Width="1200" Height="600" ClipToBounds="True">
+                <Path Fill="#40FFFFFF" Opacity="0.3">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,300">
+                                <BezierSegment Point1="100,250" Point2="200,350" Point3="300,300"/>
+                                <BezierSegment Point1="400,250" Point2="500,350" Point3="600,300"/>
+                                <BezierSegment Point1="700,250" Point2="800,350" Point3="900,300"/>
+                                <BezierSegment Point1="1000,250" Point2="1100,350" Point3="1200,300"/>
+                                <BezierSegment Point1="1300,250" Point2="1400,350" Point3="1500,300"/>
+                                <LineSegment Point="1500,600"/>
+                                <LineSegment Point="0,600"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                    <Path.RenderTransform>
+                        <TranslateTransform x:Name="wave1Transform" X="0"/>
+                    </Path.RenderTransform>
+                    <Path.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="wave1Transform"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-300"
+                                                   Duration="0:0:8"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Path.Triggers>
+                </Path>
+
+                <Path Fill="#50FFFFFF" Opacity="0.25">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,320">
+                                <BezierSegment Point1="125,270" Point2="250,370" Point3="375,320"/>
+                                <BezierSegment Point1="500,270" Point2="625,370" Point3="750,320"/>
+                                <BezierSegment Point1="875,270" Point2="1000,370" Point3="1125,320"/>
+                                <BezierSegment Point1="1250,270" Point2="1375,370" Point3="1500,320"/>
+                                <BezierSegment Point1="1625,270" Point2="1750,370" Point3="1875,320"/>
+                                <BezierSegment Point1="2000,270" Point2="2125,370" Point3="2250,320"/>
+                                <LineSegment Point="2250,600"/>
+                                <LineSegment Point="0,600"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                    <Path.RenderTransform>
+                        <TranslateTransform x:Name="wave2Transform" X="0"/>
+                    </Path.RenderTransform>
+                    <Path.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="wave2Transform"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-375"
+                                                   Duration="0:0:10"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Path.Triggers>
+                </Path>
+
+                <Path Fill="#60FFFFFF" Opacity="0.2">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,340">
+                                <BezierSegment Point1="150,290" Point2="300,390" Point3="450,340"/>
+                                <BezierSegment Point1="600,290" Point2="750,390" Point3="900,340"/>
+                                <BezierSegment Point1="1050,290" Point2="1200,390" Point3="1350,340"/>
+                                <BezierSegment Point1="1500,290" Point2="1650,390" Point3="1800,340"/>
+                                <LineSegment Point="1800,600"/>
+                                <LineSegment Point="0,600"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                    <Path.RenderTransform>
+                        <TranslateTransform x:Name="wave3Transform" X="0"/>
+                    </Path.RenderTransform>
+                    <Path.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="wave3Transform"
+                                                   Storyboard.TargetProperty="X"
+                                                   From="0" To="-450"
+                                                   Duration="0:0:12"
+                                                   RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Path.Triggers>
+                </Path>
+            </Canvas>
+        </Viewbox>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled" 
+                      Margin="25,0">
+            <StackPanel MaxWidth="1100" HorizontalAlignment="Center">
+                <Border Margin="0,25,0,30"
+                        CornerRadius="10"
+                        BorderThickness="2"
+                        BorderBrush="DarkBlue">
+                    <Border.Background>
+                        <SolidColorBrush Color="White"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="5" Opacity="0.5"/>
+                    </Border.Effect>
+
+                    <Grid Margin="35,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock FontSize="32" 
+                                       FontWeight="Bold" 
+                                       Margin="0,0,0,4">
+                                <Run Text="🏊‍" FontSize="36"/>
+                                <Run Text="Zwembad Manager" Foreground="DarkBlue"/>
+                            </TextBlock>
+                            <TextBlock Text="Manage your swimming pool operations efficiently" 
+                                       FontSize="15" 
+                                       Foreground="#555"
+                                       FontStyle="Italic"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
+                            <Button Name="btnRefresh" 
+                                    Content="🔄 Refresh" 
+                                    Click="BtnRefresh_Click"
+                                    Style="{StaticResource AeroActionButtonStyle}"/>
+                            <Button Name="btnLogout" 
+                                    Content="🚪 Logout" 
+                                    Click="BtnLogout_Click"
+                                    Style="{StaticResource AeroDangerButtonStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock Text="✨ Quick Actions" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   Margin="5,0,0,18"/>
+
+                        <UniformGrid Columns="4" Rows="1">
+                            <!-- Create User -->
+                            <Button Name="btnCreateUser" 
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="110">
+                                <StackPanel>
+                                    <TextBlock Text="👤" 
+                                               FontSize="36" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Create User" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Create Club -->
+                            <Button Name="btnCreateClub" 
+                                    Click="BtnCreateClub_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="110">
+                                <StackPanel>
+                                    <TextBlock Text="🏛️" 
+                                               FontSize="36" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Create Club" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Create Meet -->
+                            <Button Name="btnCreateMeet" 
+                                    Click="BtnCreateMeet_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="110">
+                                <StackPanel>
+                                    <TextBlock Text="🏅" 
+                                               FontSize="36" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Create Meet" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Create Pool -->
+                            <Button Name="btnCreateSwimmingPool" 
+                                    Click="BtnCreateSwimmingPool_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="110">
+                                <StackPanel>
+                                    <TextBlock Text="🏊" 
+                                               FontSize="36" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,8"/>
+                                    <TextBlock Text="Create Pool" 
+                                               FontSize="13" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+                        </UniformGrid>
                     </StackPanel>
-                </GroupBox>
+                </Border>
+
+                <!-- Management Section -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock Text="📊 Management" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   Margin="5,0,0,18"/>
+
+                        <UniformGrid Columns="3" Rows="2">
+                            <!-- Manage Users -->
+                            <Button Name="btnViewUsers" 
+                                    Click="BtnViewUsers_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="👥" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Manage Users" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Manage Clubs -->
+                            <Button Name="btnViewClubs" 
+                                    Click="BtnViewClubs_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="🏢" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Manage Clubs" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Manage Meets -->
+                            <Button Name="btnViewMeets" 
+                                    Click="BtnViewMeets_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="📅" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Manage Meets" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Manage Pools -->
+                            <Button Name="btnViewSwimmingPools" 
+                                    Click="BtnViewSwimmingPools_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="🏊‍♀️" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Manage Pools" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Manage Functions -->
+                            <Button Name="btnViewFunctions" 
+                                    Click="BtnViewFunctions_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="⚙️" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Manage Functions" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Functions & Assignments -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock Text="🔧 Functions &amp; Assignments" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   Margin="5,0,0,18"/>
+
+                        <UniformGrid Columns="3">
+                            <!-- Create Function -->
+                            <Button Name="btnCreateFunction" 
+                                    Click="BtnCreateFunction_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="➕" 
+                                               FontSize="32" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Create Function" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Assign User Function -->
+                            <Button Name="btnCreateUsersFunction" 
+                                    Click="BtnCreateUsersFunction_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="👤⚙️" 
+                                               FontSize="28" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Assign User Function" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Assign Meet Function -->
+                            <Button Name="btnCreateMeetFunction" 
+                                    Click="BtnCreateMeetFunction_Click"
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Height="95">
+                                <StackPanel>
+                                    <TextBlock Text="🏅⚙️" 
+                                               FontSize="28" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,6"/>
+                                    <TextBlock Text="Assign Meet Function" 
+                                               FontSize="12" 
+                                               FontWeight="SemiBold" 
+                                               HorizontalAlignment="Center"
+                                               Foreground="#003366"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Jury Management -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,25"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <TextBlock Text="⚖️ Jury Management" 
+                                   FontSize="20" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   Margin="5,0,0,18"/>
+
+                        <Button Name="btnCreateJurysMember" 
+                                Click="BtnCreateJurysMember_Click"
+                                Style="{StaticResource AeroGlassButtonStyle}"
+                                Height="95"
+                                HorizontalAlignment="Center"
+                                Width="280">
+                            <StackPanel>
+                                <TextBlock Text="👨‍⚖️" 
+                                           FontSize="32" 
+                                           HorizontalAlignment="Center" 
+                                           Margin="0,0,0,6"/>
+                                <TextBlock Text="Create Jury Member" 
+                                           FontSize="12" 
+                                           FontWeight="SemiBold" 
+                                           HorizontalAlignment="Center"
+                                           Foreground="#003366"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </ScrollViewer>
     </Grid>
