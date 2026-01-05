@@ -37,7 +37,25 @@ namespace ZwembaadManager.Views
             if (sender is Button button && button.Tag is Meet meet && DataContext is MeetsListViewModel viewModel)
             {
                 viewModel.SelectedMeet = meet;
+                EditPopup.Visibility = Visibility.Visible;
             }
+        }
+
+        private void ClosePopup_Click(object sender, RoutedEventArgs e)
+        {
+            EditPopup.Visibility = Visibility.Collapsed;
+        }
+
+        private void SaveAndClosePopup_Click(object sender, RoutedEventArgs e)
+        {
+            // Command will be executed via binding
+            EditPopup.Visibility = Visibility.Collapsed;
+        }
+
+        private void DeleteAndClosePopup_Click(object sender, RoutedEventArgs e)
+        {
+            // Command will be executed via binding
+            EditPopup.Visibility = Visibility.Collapsed;
         }
     }
 }

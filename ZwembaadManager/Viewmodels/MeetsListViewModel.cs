@@ -169,6 +169,7 @@ namespace ZwembaadManager.ViewModels
         public ICommand DeleteMeetCommand { get; }
         public ICommand PreviousMonthCommand { get; }
         public ICommand NextMonthCommand { get; }
+        public ICommand TodayCommand { get; }
 
         public event EventHandler<string>? MeetSaved;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -186,6 +187,7 @@ namespace ZwembaadManager.ViewModels
             DeleteMeetCommand = new RelayCommand(async () => await DeleteMeet(), () => _selectedMeet != null);
             PreviousMonthCommand = new RelayCommand(() => NavigateMonth(-1));
             NextMonthCommand = new RelayCommand(() => NavigateMonth(1));
+            TodayCommand = new RelayCommand(() => NavigateToToday());
 
             GenerateCalendar();
         }
@@ -262,6 +264,12 @@ namespace ZwembaadManager.ViewModels
         private void NavigateMonth(int direction)
         {
             _currentMonth = _currentMonth.AddMonths(direction);
+            GenerateCalendar();
+        }
+
+        private void NavigateToToday()
+        {
+            _currentMonth = DateTime.Today;
             GenerateCalendar();
         }
 

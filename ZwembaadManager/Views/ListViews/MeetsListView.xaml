@@ -4,203 +4,757 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="600" Width="966">
+             d:DesignHeight="600" d:DesignWidth="966">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <!-- Custom ScrollBar Style -->
+        <Style x:Key="CustomScrollBarThumb" TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="ThumbBorder"
+                                CornerRadius="4"
+                                Background="#4682B4"
+                                BorderThickness="1"
+                                BorderBrush="#60FFFFFF">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#4682B4" 
+                                                  Direction="0" 
+                                                  ShadowDepth="0" 
+                                                  Opacity="0.3" 
+                                                  BlurRadius="6"/>
+                            </Border.Effect>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ThumbBorder" Property="Background" Value="#5A9BD5"/>
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="True">
+                                <Setter TargetName="ThumbBorder" Property="Background" Value="#1E90FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <TextBlock Grid.Row="0" Text="Meetings Beheer" FontSize="24" FontWeight="Bold" Margin="10"/>
+        <Style x:Key="CustomScrollBarPageButton" TargetType="RepeatButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border Background="Transparent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <Button Grid.Row="1" Content="Meetings Laden" Command="{Binding LoadMeetsCommand}" 
-                Width="150" Height="40" Margin="10" HorizontalAlignment="Left"/>
+        <Style x:Key="CustomScrollBar" TargetType="ScrollBar">
+            <Setter Property="Background" Value="#20FFFFFF"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid>
+                            <Border CornerRadius="6"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="1"
+                                    BorderBrush="#30FFFFFF"
+                                    Margin="2,0"/>
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True"
+                                   Margin="2,4">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource CustomScrollBarPageButton}"
+                                                  Command="ScrollBar.PageUpCommand"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource CustomScrollBarThumb}"
+                                           Margin="1,0"/>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource CustomScrollBarPageButton}"
+                                                  Command="ScrollBar.PageDownCommand"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <!-- Calendar Navigation -->
-        <Grid Grid.Row="2" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Style x:Key="CustomScrollViewer" TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ScrollContentPresenter Grid.Column="0"/>
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                       Grid.Column="1"
+                                       Style="{StaticResource CustomScrollBar}"
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                       Margin="4,0,8,0"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Button Grid.Column="0" Content="◄ Vorige" Command="{Binding PreviousMonthCommand}" 
-                    Width="100" Height="35" Margin="0,0,10,0"/>
-            
-            <TextBlock Grid.Column="1" Text="{Binding CurrentMonthYear}" 
-                       FontSize="20" FontWeight="Bold" 
-                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            
-            <Button Grid.Column="2" Content="Volgende ►" Command="{Binding NextMonthCommand}" 
-                    Width="100" Height="35" Margin="10,0,0,0"/>
-        </Grid>
+        <!-- Aero Glass Button Style -->
+        <Style x:Key="AeroGlassButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="#003366"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="18,12"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#4682B4" 
+                                                  Direction="270" 
+                                                  ShadowDepth="1" 
+                                                  Opacity="0.15" 
+                                                  BlurRadius="4"/>
+                            </Border.Effect>
 
-        <!-- Calendar Grid -->
-        <Grid Grid.Row="3" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <!-- Main Glass Surface -->
+                                <Border x:Name="MainBorder"
+                                        CornerRadius="6"
+                                        BorderThickness="1"
+                                        BorderBrush="#40FFFFFF"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#F5FBFEFF" Offset="0"/>
+                                            <GradientStop Color="#EAF4F9FF" Offset="0.5"/>
+                                            <GradientStop Color="#E0EFF7FF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
 
-            <!-- Calendar View -->
-            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" Margin="0,0,10,0">
-                <Grid>
+                                    <!-- Subtle Glass Highlight -->
+                                    <Border CornerRadius="5" 
+                                            BorderThickness="0">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,0.3">
+                                                <GradientStop Color="#40FFFFFF" Offset="0"/>
+                                                <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"
+                                                          TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#FAFDFEFF" Offset="0"/>
+                                            <GradientStop Color="#F0F8FCFF" Offset="0.5"/>
+                                            <GradientStop Color="#E8F4FAFF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#60FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#E0EFF7FF" Offset="0"/>
+                                            <GradientStop Color="#D5E9F4FF" Offset="0.5"/>
+                                            <GradientStop Color="#CCE3F0FF" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Danger Button Style -->
+        <Style x:Key="AeroDangerButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="22,10"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="BorderBrush" Value="#E74C3C"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EF5C4C"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#87CEEB" Offset="0"/>
+                <GradientStop Color="#4682B4" Offset="0.5"/>
+                <GradientStop Color="#1E90FF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Animated Wave Background -->
+        <Viewbox Stretch="Fill" VerticalAlignment="Bottom">
+            <Canvas Width="1200" Height="600" ClipToBounds="True">
+                <Path Fill="#40FFFFFF" Opacity="0.3">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,300">
+                                <BezierSegment Point1="100,250" Point2="200,350" Point3="300,300"/>
+                                <BezierSegment Point1="400,250" Point2="500,350" Point3="600,300"/>
+                                <BezierSegment Point1="700,250" Point2="800,350" Point3="900,300"/>
+                                <BezierSegment Point1="1000,250" Point2="1100,350" Point3="1200,300"/>
+                                <BezierSegment Point1="1300,250" Point2="1400,350" Point3="1500,300"/>
+                                <LineSegment Point="1500,600"/>
+                                <LineSegment Point="0,600"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                    <Path.RenderTransform>
+                        <TranslateTransform x:Name="wave1Transform" X="0"/>
+                    </Path.RenderTransform>
+                    <Path.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="wave1Transform"
+                                                     Storyboard.TargetProperty="X"
+                                                     From="0" To="-300"
+                                                     Duration="0:0:8"
+                                                     RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Path.Triggers>
+                </Path>
+
+                <Path Fill="#50FFFFFF" Opacity="0.25">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="0,320">
+                                <BezierSegment Point1="125,270" Point2="250,370" Point3="375,320"/>
+                                <BezierSegment Point1="500,270" Point2="625,370" Point3="750,320"/>
+                                <BezierSegment Point1="875,270" Point2="1000,370" Point3="1125,320"/>
+                                <BezierSegment Point1="1250,270" Point2="1375,370" Point3="1500,320"/>
+                                <BezierSegment Point1="1625,270" Point2="1750,370" Point3="1875,320"/>
+                                <BezierSegment Point1="2000,270" Point2="2125,370" Point3="2250,320"/>
+                                <LineSegment Point="2250,600"/>
+                                <LineSegment Point="0,600"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                    <Path.RenderTransform>
+                        <TranslateTransform x:Name="wave2Transform" X="0"/>
+                    </Path.RenderTransform>
+                    <Path.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="wave2Transform"
+                                                     Storyboard.TargetProperty="X"
+                                                     From="0" To="-375"
+                                                     Duration="0:0:10"
+                                                     RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Path.Triggers>
+                </Path>
+            </Canvas>
+        </Viewbox>
+
+        <ScrollViewer Style="{StaticResource CustomScrollViewer}"
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled" 
+                      Margin="25,0">
+            <StackPanel MaxWidth="1100" HorizontalAlignment="Center">
+                <!-- Header Section -->
+                <Border Margin="0,25,0,20"
+                        CornerRadius="10"
+                        BorderThickness="2"
+                        BorderBrush="DarkBlue">
+                    <Border.Background>
+                        <SolidColorBrush Color="White"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="5" Opacity="0.5"/>
+                    </Border.Effect>
+
+                    <Grid Margin="35,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock FontSize="32" 
+                                       FontWeight="Bold" 
+                                       Margin="0,0,0,4">
+                                <Run Text="📅" FontSize="36"/>
+                                <Run Text="Meetings Beheer" Foreground="DarkBlue"/>
+                            </TextBlock>
+                            <TextBlock Text="Manage your swimming pool meetings and events" 
+                                       FontSize="15" 
+                                       Foreground="#555"
+                                       FontStyle="Italic"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal" 
+                                    VerticalAlignment="Center">
+                            <Button Content="📅 Vandaag" 
+                                    Command="{Binding TodayCommand}" 
+                                    Style="{StaticResource AeroGlassButtonStyle}"
+                                    Width="150" 
+                                    Height="40"
+                                    ToolTip="Ga naar huidige maand"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Calendar Navigation -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" 
+                                Content="◄ Vorige" 
+                                Command="{Binding PreviousMonthCommand}" 
+                                Style="{StaticResource AeroGlassButtonStyle}"
+                                Width="120" 
+                                Height="40"/>
+
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding CurrentMonthYear}" 
+                                   FontSize="24" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+
+                        <Button Grid.Column="2" 
+                                Content="Volgende ►" 
+                                Command="{Binding NextMonthCommand}" 
+                                Style="{StaticResource AeroGlassButtonStyle}"
+                                Width="120" 
+                                Height="40"/>
+                    </Grid>
+                </Border>
+
+                <!-- Calendar Section (Full Width) -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Padding="25">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <!-- Calendar View -->
+                    <Border BorderBrush="#E0E0E0" 
+                            BorderThickness="1" 
+                            CornerRadius="8">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Day Headers -->
+                            <Grid Grid.Row="0" Background="DarkBlue">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="Ma" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="1" Text="Di" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="2" Text="Wo" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="3" Text="Do" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="4" Text="Vr" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="5" Text="Za" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                                <TextBlock Grid.Column="6" Text="Zo" FontWeight="Bold" Foreground="White" 
+                                           HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8" FontSize="14"/>
+                            </Grid>
+
+                            <!-- Calendar Days -->
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding CalendarDays}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="7" Rows="6"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#E0E0E0" BorderThickness="0.5" 
+                                                Background="{Binding Background}"
+                                                MinHeight="90">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <!-- Day Number -->
+                                                <TextBlock Grid.Row="0" Text="{Binding Day}" 
+                                                           FontSize="14" 
+                                                           FontWeight="SemiBold"
+                                                           Margin="5" 
+                                                           Foreground="{Binding Foreground}"
+                                                           HorizontalAlignment="Right"/>
+
+                                                <!-- Events -->
+                                                <ItemsControl Grid.Row="1" ItemsSource="{Binding Meets}" 
+                                                              Margin="5">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="{Binding Name}" 
+                                                                    Click="MeetButton_Click"
+                                                                    Tag="{Binding}"
+                                                                    Background="#4682B4" 
+                                                                    Foreground="White"
+                                                                    FontSize="11" 
+                                                                    FontWeight="SemiBold"
+                                                                    Padding="5,3" 
+                                                                    Margin="0,2" 
+                                                                    BorderThickness="0"
+                                                                    HorizontalContentAlignment="Left"
+                                                                    ToolTip="{Binding Name}">
+                                                                <Button.Style>
+                                                                    <Style TargetType="Button">
+                                                                        <Setter Property="Cursor" Value="Hand"/>
+                                                                        <Setter Property="Template">
+                                                                            <Setter.Value>
+                                                                                <ControlTemplate TargetType="Button">
+                                                                                    <Border x:Name="border"
+                                                                                            Background="{TemplateBinding Background}"
+                                                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                            CornerRadius="3"
+                                                                                            Padding="{TemplateBinding Padding}">
+                                                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                                                          VerticalAlignment="Center"/>
+                                                                                    </Border>
+                                                                                    <ControlTemplate.Triggers>
+                                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                                            <Setter TargetName="border" Property="Background" Value="#5A9BD5"/>
+                                                                                        </Trigger>
+                                                                                    </ControlTemplate.Triggers>
+                                                                                </ControlTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </Button.Style>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Border>
+                </Border>
+
+                <!-- Progress Bar -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,20"
+                        Height="8"
+                        Background="White">
+                    <ProgressBar IsIndeterminate="{Binding IsLoading}" 
+                                 Height="6"
+                                 Margin="1"
+                                 Foreground="#4682B4"/>
+                </Border>
+
+                <!-- Back Button -->
+                <Border CornerRadius="10"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        Margin="0,0,0,25"
+                        Padding="15">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.95"/>
+                    </Border.Background>
+                    <Border.Effect>
+                        <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="3" Opacity="0.3"/>
+                    </Border.Effect>
+
+                    <Button Content="⬅ Terug naar Dashboard" 
+                            Click="BackToDashboard_Click" 
+                            Style="{StaticResource AeroGlassButtonStyle}"
+                            Width="200" 
+                            Height="40"
+                            HorizontalAlignment="Left"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Popup Modal -->
+        <Grid x:Name="EditPopup" 
+              Visibility="Collapsed"
+              Background="#80000000">
+            <Border MaxWidth="650"
+                    MaxHeight="750"
+                    CornerRadius="12"
+                    BorderThickness="2"
+                    BorderBrush="DarkBlue"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="20">
+                <Border.Background>
+                    <SolidColorBrush Color="White"/>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Direction="0" ShadowDepth="0" Opacity="0.5" BlurRadius="20"/>
+                </Border.Effect>
+
+                <Grid Margin="40">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Day Headers -->
-                    <Grid Grid.Row="0" Background="#FF2C3E50">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Grid.Column="0" Text="Ma" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="1" Text="Di" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="2" Text="Wo" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="3" Text="Do" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="4" Text="Vr" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="5" Text="Za" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
-                        <TextBlock Grid.Column="6" Text="Zo" FontWeight="Bold" Foreground="White" 
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
+                    <!-- Header -->
+                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                        <TextBlock Text="Meeting Details" 
+                                   FontSize="24" 
+                                   FontWeight="Bold" 
+                                   Foreground="DarkBlue"
+                                   VerticalAlignment="Center"/>
+                        
+                        <Button Content="✕" 
+                                Click="ClosePopup_Click"
+                                HorizontalAlignment="Right"
+                                Width="30" 
+                                Height="30"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="#666"
+                                Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border" 
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="15">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="#FFE0E0E0"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </Grid>
 
-                    <!-- Calendar Days -->
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding CalendarDays}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="7" Rows="6"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="LightGray" BorderThickness="0.5" 
-                                        Background="{Binding Background}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
+                    <!-- Content - Scrollable Two Column Layout -->
+                    <ScrollViewer Grid.Row="1" 
+                                  VerticalScrollBarVisibility="Auto"
+                                  MaxHeight="350">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                        <!-- Day Number -->
-                                        <TextBlock Grid.Row="0" Text="{Binding Day}" 
-                                                   FontSize="10" Margin="2" 
-                                                   Foreground="{Binding Foreground}"
-                                                   HorizontalAlignment="Right"/>
+                            <!-- Left Column -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="ID" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.Id, Mode=OneWay}" 
+                                         IsReadOnly="True" 
+                                         Background="#F5F5F5"
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
 
-                                        <!-- Events -->
-                                        <ItemsControl Grid.Row="1" ItemsSource="{Binding Meets}" 
-                                                      Margin="2">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Button Content="{Binding Name}" 
-                                                            Click="MeetButton_Click"
-                                                            Tag="{Binding}"
-                                                            Background="#FF3498DB" 
-                                                            Foreground="White"
-                                                            FontSize="9" 
-                                                            Padding="2" 
-                                                            Margin="0,1" 
-                                                            BorderThickness="0"
-                                                            HorizontalContentAlignment="Left"
-                                                            ToolTip="{Binding Name}">
-                                                        <Button.Style>
-                                                            <Style TargetType="Button">
-                                                                <Setter Property="Cursor" Value="Hand"/>
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter Property="Background" Value="#FF2980B9"/>
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                <TextBlock Text="Naam" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Datum" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.Date, StringFormat=yyyy-MM-dd, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Moment van de dag" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.PartOfTheDay, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Status" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.MeetState, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Club ID" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.ClubId, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,0"/>
+                            </StackPanel>
+
+                            <!-- Right Column -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Zwembad ID" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.SwimmingPoolId, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Tijdregistratie" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.TimeRegistration, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Aantal Stages" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.NumberOfInternships, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Aantal Examens" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBox Text="{Binding SelectedMeet.NumberOfExams, UpdateSourceTrigger=PropertyChanged}" 
+                                         Padding="10"
+                                         Margin="0,0,0,15"/>
+
+                                <TextBlock Text="Aangemaakt" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding SelectedMeet.CreatedDate, StringFormat=dd/MM/yyyy HH:mm}" 
+                                           Margin="0,0,0,15"
+                                           Foreground="#555"
+                                           Padding="10,5"
+                                           Background="#F5F5F5"/>
+
+                                <TextBlock Text="Gewijzigd" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding SelectedMeet.ModifiedDate, StringFormat=dd/MM/yyyy HH:mm}" 
+                                           Margin="0,0,0,0"
+                                           Foreground="#555"
+                                           Padding="10,5"
+                                           Background="#F5F5F5"/>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+
+                    <!-- Opmerking Section (Separate Row) -->
+                    <StackPanel Grid.Row="2" Margin="0,15,0,0">
+                        <TextBlock Text="Opmerking" FontWeight="Bold" Foreground="#003366" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding SelectedMeet.Remarks, UpdateSourceTrigger=PropertyChanged}" 
+                                 TextWrapping="Wrap" 
+                                 MinHeight="80"
+                                 MaxHeight="120"
+                                 Padding="10"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"/>
+                    </StackPanel>
+
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="3" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center"
+                                Margin="0,20,0,0">
+                        <Button Content="Opslaan" 
+                                Click="SaveAndClosePopup_Click"
+                                Command="{Binding SaveMeetCommand}" 
+                                Style="{StaticResource AeroGlassButtonStyle}"
+                                Width="140" 
+                                Height="45"
+                                Margin="0,0,15,0"/>
+                        <Button Content="Verwijderen" 
+                                Click="DeleteAndClosePopup_Click"
+                                Command="{Binding DeleteMeetCommand}" 
+                                Style="{StaticResource AeroDangerButtonStyle}"
+                                Width="140" 
+                                Height="45"/>
+                    </StackPanel>
                 </Grid>
             </Border>
-
-            <!-- Details Panel -->
-            <ScrollViewer Grid.Column="1" Margin="10" VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <TextBlock Text="Meeting Details" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="ID" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.Id, Mode=OneWay}" IsReadOnly="True" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Naam" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.Name, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Datum" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.Date, StringFormat=yyyy-MM-dd, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Moment van de dag" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.PartOfTheDay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Status" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.MeetState, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Club ID" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.ClubId, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Zwembad ID" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.SwimmingPoolId, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Tijdregistratie" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.TimeRegistration, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Aantal Stages" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.NumberOfInternships, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Aantal Examens" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.NumberOfExams, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Opmerking" FontWeight="Bold"/>
-                    <TextBox Text="{Binding SelectedMeet.Remarks, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" TextWrapping="Wrap" Height="60"/>
-
-                    <TextBlock Text="Aangemaakt" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedMeet.CreatedDate, StringFormat=dd/MM/yyyy HH:mm}" Margin="0,0,0,10"/>
-
-                    <TextBlock Text="Gewijzigd" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding SelectedMeet.ModifiedDate, StringFormat=dd/MM/yyyy HH:mm}" Margin="0,0,0,10"/>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                        <Button Content="Opslaan" Command="{Binding SaveMeetCommand}" 
-                                Width="100" Height="35" Margin="0,0,10,0"/>
-                        <Button Content="Verwijderen" Command="{Binding DeleteMeetCommand}" 
-                                Width="100" Height="35" Background="#FFE74C3C"/>
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
         </Grid>
-
-        <ProgressBar Grid.Row="4" IsIndeterminate="{Binding IsLoading}" Height="3"/>
-
-        <Button Grid.Row="5" Content="Terug naar Dashboard" Click="BackToDashboard_Click" 
-                Width="150" Height="35" Margin="10" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>
