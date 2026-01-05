@@ -555,7 +555,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtName" 
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -572,7 +572,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtOrder" 
+                            <TextBox Text="{Binding Order, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -611,7 +611,8 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <ComboBox Name="cmbCategory" 
+                            <ComboBox Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Grid.Column="1" 
                                       Style="{StaticResource ModernComboBoxStyle}">
                                 <ComboBoxItem Content="Official"/>
@@ -635,7 +636,7 @@
                                        FontSize="14"
                                        Foreground="#003366"
                                        Margin="0,12,0,0"/>
-                            <TextBox Name="txtDescription" 
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"
                                      TextWrapping="Wrap" 
@@ -660,23 +661,21 @@
                     </Border.Effect>
 
                     <UniformGrid Columns="3" HorizontalAlignment="Center">
-                        <Button Name="btnBackToDashboard" 
-                                Content="← Back to Dashboard" 
-                                Click="BtnBackToDashboard_Click"
+                        <Button Content="← Back to Dashboard" 
+                                Command="{Binding BackToDashboardCommand}"
                                 Style="{StaticResource AeroGlassButtonStyle}"
                                 Width="180"
                                 Height="50"/>
                         
-                        <Button Name="btnSave" 
-                                Content="💾 Save Function" 
-                                Click="BtnSave_Click"
+                        <Button Content="{Binding SaveButtonText}"
+                                Command="{Binding SaveCommand}"
+                                IsEnabled="{Binding IsNotSaving}"
                                 Style="{StaticResource AeroSuccessButtonStyle}"
                                 Width="180"
                                 Height="50"/>
                         
-                        <Button Name="btnClear" 
-                                Content="🔄 Clear Form" 
-                                Click="BtnClear_Click"
+                        <Button Content="🔄 Clear Form" 
+                                Command="{Binding ClearCommand}"
                                 Style="{StaticResource AeroActionButtonStyle}"
                                 Width="180"
                                 Height="50"/>

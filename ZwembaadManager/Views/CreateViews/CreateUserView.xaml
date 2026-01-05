@@ -555,7 +555,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtFirstName" 
+                            <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -572,7 +572,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtLastName" 
+                            <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -589,7 +589,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtEmail" 
+                            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -606,7 +606,8 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <ComboBox Name="cmbGender" 
+                            <ComboBox ItemsSource="{Binding GenderOptions}"
+                                      SelectedItem="{Binding SelectedGender}"
                                       Grid.Column="1" 
                                       Style="{StaticResource ModernComboBoxStyle}"
                                       DisplayMemberPath="DisplayName" 
@@ -625,7 +626,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtMobile" 
+                            <TextBox Text="{Binding Mobile, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -664,7 +665,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtClubId" 
+                            <TextBox Text="{Binding ClubId, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -681,7 +682,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtLicense" 
+                            <TextBox Text="{Binding License, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -698,7 +699,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtCounty" 
+                            <TextBox Text="{Binding County, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -719,23 +720,21 @@
                     </Border.Effect>
 
                     <UniformGrid Columns="3" HorizontalAlignment="Center">
-                        <Button Name="btnBackToDashboard" 
-                                Content="← Back to Dashboard" 
-                                Click="BtnBackToDashboard_Click"
+                        <Button Content="← Back to Dashboard" 
+                                Command="{Binding BackToDashboardCommand}"
                                 Style="{StaticResource AeroGlassButtonStyle}"
                                 Width="180"
                                 Height="50"/>
-                        
-                        <Button Name="btnSave" 
-                                Content="💾 Save User" 
-                                Click="BtnSave_Click"
+
+                        <Button Content="{Binding SaveButtonText}"
+                                Command="{Binding SaveCommand}"
+                                IsEnabled="{Binding IsNotSaving}"
                                 Style="{StaticResource AeroSuccessButtonStyle}"
                                 Width="180"
                                 Height="50"/>
-                        
-                        <Button Name="btnClear" 
-                                Content="🔄 Clear Form" 
-                                Click="BtnClear_Click"
+
+                        <Button Content="🔄 Clear Form" 
+                                Command="{Binding ClearCommand}"
                                 Style="{StaticResource AeroActionButtonStyle}"
                                 Width="180"
                                 Height="50"/>

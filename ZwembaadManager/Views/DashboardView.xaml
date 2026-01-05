@@ -411,9 +411,8 @@
                         <StackPanel Grid.Column="1" 
                                     Orientation="Horizontal" 
                                     VerticalAlignment="Center">
-                            <Button Name="btnLogout" 
-                                    Content="Logout" 
-                                    Click="BtnLogout_Click"
+                            <Button Content="Logout" 
+                                    Command="{Binding LogoutCommand}"
                                     Style="{StaticResource AeroDangerButtonStyle}"/>
                         </StackPanel>
                     </Grid>
@@ -440,8 +439,7 @@
 
                         <UniformGrid Columns="4" Rows="1">
                             <!-- Create User -->
-                            <Button Name="btnCreateUser"
-                                    Click="BtnCreateUser_Click"
+                            <Button Command="{Binding CreateUserCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="110">
                                 <StackPanel>
@@ -458,8 +456,7 @@
                             </Button>
 
                             <!-- Create Club -->
-                            <Button Name="btnCreateClub" 
-                                    Click="BtnCreateClub_Click"
+                            <Button Command="{Binding CreateClubCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="110">
                                 <StackPanel>
@@ -476,8 +473,7 @@
                             </Button>
 
                             <!-- Create Meet -->
-                            <Button Name="btnCreateMeet" 
-                                    Click="BtnCreateMeet_Click"
+                            <Button Command="{Binding CreateMeetCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="110">
                                 <StackPanel>
@@ -494,8 +490,7 @@
                             </Button>
 
                             <!-- Create Pool -->
-                            <Button Name="btnCreateSwimmingPool" 
-                                    Click="BtnCreateSwimmingPool_Click"
+                            <Button Command="{Binding CreateSwimmingPoolCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="110">
                                 <StackPanel>
@@ -536,8 +531,7 @@
 
                         <UniformGrid Columns="3" Rows="2">
                             <!-- Manage Users -->
-                            <Button Name="btnViewUsers" 
-                                    Click="BtnViewUsers_Click"
+                            <Button Command="{Binding ViewUsersCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -554,8 +548,7 @@
                             </Button>
 
                             <!-- Manage Clubs -->
-                            <Button Name="btnViewClubs" 
-                                    Click="BtnViewClubs_Click"
+                            <Button Command="{Binding ViewClubsCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -572,8 +565,7 @@
                             </Button>
 
                             <!-- Manage Meets -->
-                            <Button Name="btnViewMeets" 
-                                    Click="BtnViewMeets_Click"
+                            <Button Command="{Binding ViewMeetsCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -590,8 +582,7 @@
                             </Button>
 
                             <!-- Manage Pools -->
-                            <Button Name="btnViewSwimmingPools" 
-                                    Click="BtnViewSwimmingPools_Click"
+                            <Button Command="{Binding ViewSwimmingPoolsCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -608,8 +599,7 @@
                             </Button>
 
                             <!-- Manage Functions -->
-                            <Button Name="btnViewFunctions" 
-                                    Click="BtnViewFunctions_Click"
+                            <Button Command="{Binding ViewFunctionsCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -650,8 +640,7 @@
 
                         <UniformGrid Columns="3">
                             <!-- Create Function -->
-                            <Button Name="btnCreateFunction" 
-                                    Click="BtnCreateFunction_Click"
+                            <Button Command="{Binding CreateFunctionCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -668,8 +657,7 @@
                             </Button>
 
                             <!-- Assign User Function -->
-                            <Button Name="btnCreateUsersFunction" 
-                                    Click="BtnCreateUsersFunction_Click"
+                            <Button Command="{Binding CreateUsersFunctionCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -687,8 +675,7 @@
                             </Button>
 
                             <!-- Assign Meet Function -->
-                            <Button Name="btnCreateMeetFunction" 
-                                    Click="BtnCreateMeetFunction_Click"
+                            <Button Command="{Binding CreateMeetFunctionCommand}"
                                     Style="{StaticResource AeroGlassButtonStyle}"
                                     Height="95">
                                 <StackPanel>
@@ -728,8 +715,7 @@
                                    Foreground="DarkBlue"
                                    Margin="5,0,0,18"/>
 
-                        <Button Name="btnCreateJurysMember" 
-                                Click="BtnCreateJurysMember_Click"
+                        <Button Command="{Binding CreateJurysMemberCommand}"
                                 Style="{StaticResource AeroGlassButtonStyle}"
                                 Height="95"
                                 HorizontalAlignment="Center"

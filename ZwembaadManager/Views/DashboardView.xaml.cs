@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ZwembaadManager.ViewModels;
 
 namespace ZwembaadManager.Views
 {
@@ -25,81 +16,13 @@ namespace ZwembaadManager.Views
         public DashboardView()
         {
             InitializeComponent();
-        }
+            var viewModel = new DashboardViewModel();
 
-        private void BtnCreateUser_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateUser");
-        }
+    
+            viewModel.OpenViewRequested += (sender, viewType) => OpenViewRequested?.Invoke(this, viewType);
+            viewModel.LogoutRequested += (sender, e) => LogoutRequested?.Invoke(this, e);
 
-        private void BtnCreateClub_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateClub");
-        }
-
-        private void BtnCreateMeet_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateMeet");
-        }
-
-        private void BtnCreateSwimmingPool_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateSwimmingPool");
-        }
-
-        private void BtnCreateAddress_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateAddress");
-        }
-
-        private void BtnCreateFunction_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateFunction");
-        }
-
-        private void BtnCreateUsersFunction_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateUsersFunction");
-        }
-
-        private void BtnCreateMeetFunction_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateMeetFunction");
-        }
-
-        private void BtnCreateJurysMember_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "CreateJurysMember");
-        }
-
-        private void BtnViewUsers_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "UsersList");
-        }
-
-        private void BtnViewClubs_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "ClubsList");
-        }
-
-        private void BtnViewMeets_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "MeetsList");
-        }
-
-        private void BtnViewSwimmingPools_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "SwimmingPoolsList");
-        }
-
-        private void BtnViewFunctions_Click(object sender, RoutedEventArgs e)
-        {
-            OpenViewRequested?.Invoke(this, "FunctionsList");
-        }
-
-        private void BtnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            LogoutRequested?.Invoke(this, EventArgs.Empty);
+            DataContext = viewModel;
         }
     }
 }

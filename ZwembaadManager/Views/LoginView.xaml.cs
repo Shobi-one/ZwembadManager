@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ZwembaadManager.Events;
+using ZwembaadManager.ViewModels;
 
 namespace ZwembaadManager.Views
 {
@@ -18,11 +12,20 @@ namespace ZwembaadManager.Views
     /// </summary>
     public partial class LoginView : UserControl
     {
+        private readonly LoginViewModel _viewModel;
+
         public event EventHandler<LoginEventArgs>? LoginSuccessful;
 
         public LoginView()
         {
             InitializeComponent();
+            _viewModel = new LoginViewModel();
+
+            // Forward ViewModel event to View event for MainWindow
+            _viewModel.LoginSuccessful += (sender, e) => LoginSuccessful?.Invoke(this, e);
+
+            DataContext = _viewModel;
+
             Loaded += (s, e) => txtUsername.Focus();
             KeyDown += LoginView_KeyDown;
         }
@@ -42,36 +45,18 @@ namespace ZwembaadManager.Views
 
         private void PerformLogin()
         {
+            // PasswordBox cannot be bound for security reasons, so we handle it in code-behind
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Password;
 
-            if (string.IsNullOrEmpty(username))
-            {
-                MessageBox.Show("Gelieve een gebruikersnaam in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtUsername.Focus();
-                return;
-            }
-
-            if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Gelieve een wachtwoord in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtPassword.Focus();
-                return;
-            }
-
-            LoginSuccessful?.Invoke(this, new LoginEventArgs { Username = username });
+            _viewModel.ValidateAndLogin(username, password);
         }
 
         public void ClearCredentials()
         {
-            txtUsername.Clear();
+            _viewModel.ClearCredentials();
             txtPassword.Clear();
             txtUsername.Focus();
         }
-    }
-
-    public class LoginEventArgs : EventArgs
-    {
-        public string Username { get; set; } = string.Empty;
     }
 }

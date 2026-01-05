@@ -254,7 +254,7 @@
                         </EventTrigger>
                     </Grid.Triggers>
                 </Grid>
-                
+
                 <Grid Canvas.Left="680" Canvas.Top="430" Width="35" Height="35">
                     <Ellipse>
                         <Ellipse.Fill>
@@ -618,6 +618,7 @@
                                Foreground="DarkBlue"
                                Padding="5,0,5,5"/>
                         <TextBox x:Name="txtUsername"
+                                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                                  Height="35"
                                  FontSize="14"
                                  Padding="8"
@@ -638,7 +639,6 @@
                     </StackPanel>
 
                     <Button Grid.Row="3"
-                            x:Name="btnLogin"
                             Content="Inloggen"
                             Height="40"
                             FontSize="16"

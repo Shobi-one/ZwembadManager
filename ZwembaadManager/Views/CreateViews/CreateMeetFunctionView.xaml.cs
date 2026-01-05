@@ -1,6 +1,7 @@
 using System;
-using System.Windows;
 using System.Windows.Controls;
+using ZwembaadManager.Services;
+using ZwembaadManager.ViewModels;
 
 namespace ZwembaadManager.Views
 {
@@ -9,66 +10,23 @@ namespace ZwembaadManager.Views
     /// </summary>
     public partial class CreateMeetFunctionView : UserControl
     {
+        private readonly CreateMeetFunctionViewModel _viewModel;
+
         public event EventHandler? BackToDashboardRequested;
         public event EventHandler? MeetFunctionSaveRequested;
 
         public CreateMeetFunctionView()
         {
             InitializeComponent();
-        }
 
-        private void BtnBackToDashboard_Click(object sender, RoutedEventArgs e)
-        {
-            BackToDashboardRequested?.Invoke(this, EventArgs.Empty);
-        }
+            var dataService = new JsonDataService();
+            _viewModel = new CreateMeetFunctionViewModel(dataService);
 
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
-        {
-            if (ValidateForm())
-            {
-                MeetFunctionSaveRequested?.Invoke(this, EventArgs.Empty);
-            }
-        }
+            // Forward ViewModel events to View events for MainWindow
+            _viewModel.BackToDashboardRequested += (sender, e) => BackToDashboardRequested?.Invoke(this, e);
+            _viewModel.MeetFunctionSaveRequested += (sender, e) => MeetFunctionSaveRequested?.Invoke(this, e);
 
-        private void BtnClear_Click(object sender, RoutedEventArgs e)
-        {
-            ClearForm();
-        }
-
-        private bool ValidateForm()
-        {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                MessageBox.Show("Function Name is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtName.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtOrder.Text))
-            {
-                MessageBox.Show("Order is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtOrder.Focus();
-                return false;
-            }
-
-            if (!int.TryParse(txtOrder.Text, out int orderValue) || orderValue < 0)
-            {
-                MessageBox.Show("Order must be a valid non-negative number.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                txtOrder.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ClearForm()
-        {
-            txtName.Clear();
-            txtOrder.Clear();
-            cmbCategory.SelectedIndex = -1;
-            txtDescription.Clear();
-            
-            txtName.Focus();
+            DataContext = _viewModel;
         }
     }
 }

@@ -27,7 +27,7 @@
     "NumberOfExams": 24,
     "Remarks": "Large multi-day event",
     "CreatedDate": "2024-02-01T00:00:00",
-    "ModifiedDate": "2024-02-01T00:00:00"
+    "ModifiedDate": "2026-01-05T19:52:52.5343986+01:00"
   },
   {
     "Id": 3,
@@ -61,7 +61,7 @@
   },
   {
     "Id": 5,
-    "Name": "Test",
+    "Name": "AAA",
     "Date": "2026-01-01T00:00:00+01:00",
     "PartOfTheDay": "Morning",
     "MeetState": "Planned",
@@ -72,6 +72,6 @@
     "NumberOfExams": 1,
     "Remarks": "",
     "CreatedDate": "2026-01-01T19:29:23.4279586+01:00",
-    "ModifiedDate": "2026-01-01T19:29:23.427959+01:00"
+    "ModifiedDate": "2026-01-05T21:23:05.5523834+01:00"
   }
 ]
