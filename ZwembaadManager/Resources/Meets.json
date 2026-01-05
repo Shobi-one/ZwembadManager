@@ -58,5 +58,20 @@
     "Remarks": "adadada",
     "CreatedDate": "2025-12-16T15:59:43.8041398+01:00",
     "ModifiedDate": "2025-12-16T15:59:43.8041414+01:00"
+  },
+  {
+    "Id": 5,
+    "Name": "Test",
+    "Date": "2026-01-01T00:00:00+01:00",
+    "PartOfTheDay": "Morning",
+    "MeetState": "Planned",
+    "ClubId": 2,
+    "SwimmingPoolId": 5,
+    "TimeRegistration": "85",
+    "NumberOfInternships": 0,
+    "NumberOfExams": 1,
+    "Remarks": "",
+    "CreatedDate": "2026-01-01T19:29:23.4279586+01:00",
+    "ModifiedDate": "2026-01-01T19:29:23.427959+01:00"
   }
 ]
