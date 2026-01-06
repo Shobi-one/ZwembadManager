@@ -8,7 +8,7 @@
              d:DesignHeight="600" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <!-- Custom ScrollBar Style -->
+        <!-- ScrollBar -->
         <Style x:Key="CustomScrollBarThumb" TargetType="Thumb">
             <Setter Property="Template">
                 <Setter.Value>
@@ -352,6 +352,8 @@
                             <ContentPresenter x:Name="contentPresenter"
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                               Margin="12,10"
                                               HorizontalAlignment="Left"
                                               VerticalAlignment="Center"
@@ -373,7 +375,19 @@
                                 </Border>
                             </Popup>
                         </Grid>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="HasItems" Value="False">
+                        <Setter TargetName="contentPresenter" Property="Content" Value="(No items)"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
                     </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -613,8 +627,7 @@
                                       SelectedItem="{Binding SelectedGender}"
                                       Grid.Column="1" 
                                       Style="{StaticResource ModernComboBoxStyle}"
-                                      DisplayMemberPath="DisplayName" 
-                                      SelectedValuePath="Value"/>
+                                      DisplayMemberPath="DisplayName"/>
                         </Grid>
 
                         <!-- Mobile -->
@@ -656,7 +669,7 @@
                                    Foreground="DarkBlue"
                                    Margin="0,0,0,25"/>
 
-                        <!-- Club Selection (WITH DROPDOWN) -->
+                        <!-- Club Selection -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>

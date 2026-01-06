@@ -400,7 +400,7 @@
                                        FontWeight="Bold" 
                                        Margin="0,0,0,4">
                                 <Run Text="🏊‍" FontSize="36"/>
-                                <Run Text="Zwembad Manager" Foreground="DarkBlue"/>
+                                <Run Text="Zwembaad Manager" Foreground="DarkBlue"/>
                             </TextBlock>
                             <TextBlock Text="Manage your swimming pool operations efficiently" 
                                        FontSize="15" 
