@@ -103,15 +103,23 @@ namespace ZwembaadManager.ViewModels
                 IsSaving = true;
                 SaveButtonText = "Saving...";
 
+                // Create club with GUID automatically generated in constructor
                 var club = new Club(Name.Trim(), Abbreviation.Trim());
                 await _dataService.AddClubAsync(club);
 
-                MessageBox.Show($"Club saved to: {_dataService.GetClubsFilePath()}",
-                    "Debug Info",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
+                // Raise event with the saved club (including its GUID)
                 ClubSaveRequested?.Invoke(this, new ClubSavedEventArgs(club));
+                
+                // Clear form after successful save
+                ClearForm();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Handles duplicate club names/abbreviations
+                MessageBox.Show(ex.Message,
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {

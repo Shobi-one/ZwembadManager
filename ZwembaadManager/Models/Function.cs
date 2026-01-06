@@ -4,7 +4,7 @@ namespace ZwembaadManager.Models
 {
     public class Function
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Abbreviation { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
@@ -12,6 +12,7 @@ namespace ZwembaadManager.Models
 
         public Function()
         {
+            Id = Guid.NewGuid();
             CreatedDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
         }

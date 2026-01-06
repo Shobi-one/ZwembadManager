@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +10,7 @@ using ZwembaadManager.Classes;
 using ZwembaadManager.Classes.Enum;
 using ZwembaadManager.Events;
 using ZwembaadManager.Extensions;
+using ZwembaadManager.Models;
 using ZwembaadManager.Services;
 
 namespace ZwembaadManager.ViewModels
@@ -21,12 +22,13 @@ namespace ZwembaadManager.ViewModels
         private string _lastName = string.Empty;
         private string _email = string.Empty;
         private string _mobile = string.Empty;
-        private string _clubId = string.Empty;
+        private Club? _selectedClub;
         private string _license = string.Empty;
         private string _county = string.Empty;
         private object? _selectedGender;
         private bool _isSaving;
-        private string _saveButtonText = "?? Save User";
+        private bool _isLoadingClubs;
+        private string _saveButtonText = "💾 Save User";
 
         public event EventHandler? BackToDashboardRequested;
         public event EventHandler<UserSavedEventArgs>? UserSaveRequested;
@@ -84,14 +86,14 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public string ClubId
+        public Club? SelectedClub
         {
-            get => _clubId;
+            get => _selectedClub;
             set
             {
-                if (_clubId != value)
+                if (_selectedClub != value)
                 {
-                    _clubId = value;
+                    _selectedClub = value;
                     OnPropertyChanged();
                 }
             }
@@ -150,6 +152,19 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public bool IsLoadingClubs
+        {
+            get => _isLoadingClubs;
+            set
+            {
+                if (_isLoadingClubs != value)
+                {
+                    _isLoadingClubs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool IsNotSaving => !IsSaving;
 
         public string SaveButtonText
@@ -166,6 +181,7 @@ namespace ZwembaadManager.ViewModels
         }
 
         public ObservableCollection<object> GenderOptions { get; }
+        public ObservableCollection<Club> AvailableClubs { get; }
 
         public ICommand BackToDashboardCommand { get; }
         public ICommand SaveCommand { get; }
@@ -175,17 +191,46 @@ namespace ZwembaadManager.ViewModels
         {
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
 
-            // Load gender options
+            // Initialize collections
             GenderOptions = new ObservableCollection<object>(
                 Enum.GetValues<Gender>()
                     .Select(g => new { DisplayName = g.GetDisplayName(), Value = g })
                     .Cast<object>()
             );
 
+            AvailableClubs = new ObservableCollection<Club>();
+
             // Initialize commands
             BackToDashboardCommand = new RelayCommand(() => BackToDashboardRequested?.Invoke(this, EventArgs.Empty));
             SaveCommand = new RelayCommand(async () => await SaveUser(), () => !IsSaving);
             ClearCommand = new RelayCommand(ClearForm);
+
+            // Load clubs asynchronously
+            _ = LoadClubsAsync();
+        }
+
+        private async Task LoadClubsAsync()
+        {
+            try
+            {
+                IsLoadingClubs = true;
+                var clubs = await _dataService.LoadClubsAsync();
+
+                AvailableClubs.Clear();
+                foreach (var club in clubs.OrderBy(c => c.Name))
+                {
+                    AvailableClubs.Add(club);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading clubs: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingClubs = false;
+            }
         }
 
         private async Task SaveUser()
@@ -204,6 +249,9 @@ namespace ZwembaadManager.ViewModels
                 await _dataService.AddUserAsync(newUser);
 
                 UserSaveRequested?.Invoke(this, new UserSavedEventArgs(newUser));
+
+                // Clear form after successful save
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -213,7 +261,7 @@ namespace ZwembaadManager.ViewModels
             finally
             {
                 IsSaving = false;
-                SaveButtonText = "?? Save User";
+                SaveButtonText = "💾 Save User";
             }
         }
 
@@ -230,9 +278,10 @@ namespace ZwembaadManager.ViewModels
                 IsActive = true
             };
 
-            if (!string.IsNullOrWhiteSpace(ClubId) && int.TryParse(ClubId, out int clubId))
+            // Set ClubId from selected club
+            if (SelectedClub != null)
             {
-                user.ClubId = clubId;
+                user.ClubId = SelectedClub.Id;
             }
 
             if (SelectedGender != null)
@@ -284,13 +333,6 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(ClubId) && !int.TryParse(ClubId, out _))
-            {
-                MessageBox.Show("Club ID must be a valid number.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
             return true;
         }
 
@@ -300,11 +342,11 @@ namespace ZwembaadManager.ViewModels
             LastName = string.Empty;
             Email = string.Empty;
             Mobile = string.Empty;
-            ClubId = string.Empty;
+            SelectedClub = null;
             License = string.Empty;
             County = string.Empty;
             SelectedGender = null;
-            SaveButtonText = "?? Save User";
+            SaveButtonText = "💾 Save User";
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

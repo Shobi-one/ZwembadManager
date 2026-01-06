@@ -200,9 +200,9 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!int.TryParse(UserId, out _))
+            if (!Guid.TryParse(UserId, out _))
             {
-                MessageBox.Show("User ID must be a valid number.", "Validation Error",
+                MessageBox.Show("User ID must be a valid GUID.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -214,9 +214,9 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!int.TryParse(FunctionId, out _))
+            if (!Guid.TryParse(FunctionId, out _))
             {
-                MessageBox.Show("Function ID must be a valid number.", "Validation Error",
+                MessageBox.Show("Function ID must be a valid GUID.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }

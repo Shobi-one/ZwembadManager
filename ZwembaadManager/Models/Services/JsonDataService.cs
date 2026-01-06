@@ -1,14 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.IO;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using ZwembaadManager.Classes;
 using ZwembaadManager.Models;
-using ZwembaadManager.Classes.Enum;
-using System.Reflection;
-using System.Linq;
 
 namespace ZwembaadManager.Services
 {
@@ -200,16 +199,15 @@ namespace ZwembaadManager.Services
             }
         }
 
-        public async Task<int> GetNextUserIdAsync()
-        {
-            var users = await LoadUsersAsync();
-            return users.Count > 0 ? users.Max(u => u.Id) + 1 : 1;
-        }
-
         public async Task AddUserAsync(User newUser)
         {
             var users = await LoadUsersAsync();
-            newUser.Id = await GetNextUserIdAsync();
+            
+            // Ensure new GUID if not set
+            if (newUser.Id == Guid.Empty)
+            {
+                newUser.Id = Guid.NewGuid();
+            }
             
             users.Add(newUser);
             await SaveUsersAsync(users);
@@ -256,12 +254,6 @@ namespace ZwembaadManager.Services
             }
         }
 
-        public async Task<int> GetNextClubIdAsync()
-        {
-            var clubs = await LoadClubsAsync();
-            return clubs.Count > 0 ? clubs.Max(c => c.Id) + 1 : 1;
-        }
-
         public async Task AddClubAsync(Club newClub)
         {
             var clubs = await LoadClubsAsync();
@@ -275,7 +267,12 @@ namespace ZwembaadManager.Services
                 throw new InvalidOperationException($"A club with the name '{newClub.Name}' or abbreviation '{newClub.Abbreviation}' already exists.");
             }
 
-            newClub.Id = await GetNextClubIdAsync();
+            // Ensure new GUID if not set
+            if (newClub.Id == Guid.Empty)
+            {
+                newClub.Id = Guid.NewGuid();
+            }
+            
             newClub.CreatedDate = DateTime.Now;
             newClub.ModifiedDate = DateTime.Now;
             
@@ -324,12 +321,6 @@ namespace ZwembaadManager.Services
             }
         }
 
-        public async Task<int> GetNextMeetIdAsync()
-        {
-            var meets = await LoadMeetsAsync();
-            return meets.Count > 0 ? meets.Max(m => m.Id) + 1 : 1;
-        }
-
         public async Task AddMeetAsync(Meet newMeet)
         {
             var meets = await LoadMeetsAsync();
@@ -341,7 +332,12 @@ namespace ZwembaadManager.Services
                 throw new InvalidOperationException($"A meet with the name '{newMeet.Name}' on {newMeet.Date:yyyy-MM-dd} already exists.");
             }
 
-            newMeet.Id = await GetNextMeetIdAsync();
+            // Ensure new GUID if not set
+            if (newMeet.Id == Guid.Empty)
+            {
+                newMeet.Id = Guid.NewGuid();
+            }
+            
             newMeet.CreatedDate = DateTime.Now;
             newMeet.ModifiedDate = DateTime.Now;
             
@@ -391,12 +387,6 @@ namespace ZwembaadManager.Services
             }
         }
 
-        public async Task<int> GetNextSwimmingPoolIdAsync()
-        {
-            var swimmingPools = await LoadSwimmingPoolsAsync();
-            return swimmingPools.Count > 0 ? swimmingPools.Max(sp => sp.Id) + 1 : 1;
-        }
-
         public async Task AddSwimmingPoolAsync(SwimmingPool newSwimmingPool)
         {
             var swimmingPools = await LoadSwimmingPoolsAsync();
@@ -409,7 +399,12 @@ namespace ZwembaadManager.Services
                 throw new InvalidOperationException($"A swimming pool with the name '{newSwimmingPool.Name}' already exists.");
             }
 
-            newSwimmingPool.Id = await GetNextSwimmingPoolIdAsync();
+            // Ensure new GUID if not set
+            if (newSwimmingPool.Id == Guid.Empty)
+            {
+                newSwimmingPool.Id = Guid.NewGuid();
+            }
+            
             newSwimmingPool.CreatedDate = DateTime.Now;
             newSwimmingPool.ModifiedDate = DateTime.Now;
             
@@ -458,12 +453,6 @@ namespace ZwembaadManager.Services
             }
         }
 
-        public async Task<int> GetNextFunctionIdAsync()
-        {
-            var functions = await LoadFunctionsAsync();
-            return functions.Count > 0 ? functions.Max(f => f.Id) + 1 : 1;
-        }
-
         public async Task AddFunctionAsync(Function newFunction)
         {
             var functions = await LoadFunctionsAsync();
@@ -475,7 +464,12 @@ namespace ZwembaadManager.Services
                 throw new InvalidOperationException($"A function with the name '{newFunction.Name}' or abbreviation '{newFunction.Abbreviation}' already exists.");
             }
 
-            newFunction.Id = await GetNextFunctionIdAsync();
+            // Ensure new GUID if not set
+            if (newFunction.Id == Guid.Empty)
+            {
+                newFunction.Id = Guid.NewGuid();
+            }
+            
             newFunction.CreatedDate = DateTime.Now;
             newFunction.ModifiedDate = DateTime.Now;
             

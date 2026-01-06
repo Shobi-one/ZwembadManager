@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace ZwembaadManager.ViewModels
         private NumberOfLanes? _numberOfLanes;
         private string _addressId = string.Empty;
         private bool _isSaving;
-        private string _saveButtonText = "?? Save Pool";
+        private string _saveButtonText = "💾 Save Pool";
 
         public event EventHandler? BackToDashboardRequested;
         public event EventHandler<SwimmingPoolSavedEventArgs>? SwimmingPoolSaveRequested;
@@ -166,23 +166,28 @@ namespace ZwembaadManager.ViewModels
                     NumberOfLanes!.Value
                 );
 
-                // Set optional AddressId
-                if (!string.IsNullOrWhiteSpace(AddressId) && int.TryParse(AddressId, out int addressId))
+                // Set optional AddressId - NOW USING GUID
+                if (!string.IsNullOrWhiteSpace(AddressId) && Guid.TryParse(AddressId, out Guid addressGuid))
                 {
-                    swimmingPool.AddressId = addressId;
+                    swimmingPool.AddressId = addressGuid;
                 }
 
                 // Save to JSON file using JsonDataService
                 await _dataService.AddSwimmingPoolAsync(swimmingPool);
 
-                // Show debug info (remove this in production)
-                MessageBox.Show($"Swimming Pool saved to: {_dataService.GetSwimmingPoolsFilePath()}",
-                    "Debug Info",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
                 // Raise the event with the saved swimming pool
                 SwimmingPoolSaveRequested?.Invoke(this, new SwimmingPoolSavedEventArgs(swimmingPool));
+                
+                // Clear form after successful save
+                ClearForm();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Handles duplicate swimming pools
+                MessageBox.Show(ex.Message,
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
@@ -194,7 +199,7 @@ namespace ZwembaadManager.ViewModels
             finally
             {
                 IsSaving = false;
-                SaveButtonText = "?? Save Pool";
+                SaveButtonText = "💾 Save Pool";
             }
         }
 
@@ -228,9 +233,9 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(AddressId) && !int.TryParse(AddressId, out _))
+            if (!string.IsNullOrWhiteSpace(AddressId) && !Guid.TryParse(AddressId, out _))
             {
-                MessageBox.Show("Address ID must be a valid number.", "Validation Error",
+                MessageBox.Show("Address ID must be a valid GUID.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -244,7 +249,7 @@ namespace ZwembaadManager.ViewModels
             PoolLength = string.Empty;
             NumberOfLanes = null;
             AddressId = string.Empty;
-            SaveButtonText = "?? Save Pool";
+            SaveButtonText = "💾 Save Pool";
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

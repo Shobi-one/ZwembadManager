@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ZwembaadManager.Models
 {
     public class Club
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Abbreviation { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
@@ -14,6 +12,7 @@ namespace ZwembaadManager.Models
 
         public Club()
         {
+            Id = Guid.NewGuid();
             CreatedDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
         }

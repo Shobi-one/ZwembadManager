@@ -4,13 +4,13 @@ namespace ZwembaadManager.Models
 {
     public class Meet
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime Date { get; set; }
         public string PartOfTheDay { get; set; } = string.Empty;
         public string MeetState { get; set; } = string.Empty;
-        public int? ClubId { get; set; }
-        public int? SwimmingPoolId { get; set; }
+        public Guid? ClubId { get; set; }
+        public Guid? SwimmingPoolId { get; set; }
         public string TimeRegistration { get; set; } = string.Empty;
         public int? NumberOfInternships { get; set; }
         public int? NumberOfExams { get; set; }
@@ -20,6 +20,7 @@ namespace ZwembaadManager.Models
 
         public Meet()
         {
+            Id = Guid.NewGuid();
             CreatedDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
             Date = DateTime.Today;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows;
 using System.Threading.Tasks;
@@ -14,7 +15,9 @@ namespace ZwembaadManager.ViewModels
     {
         private readonly JsonDataService _dataService;
         private ObservableCollection<Club> _clubs;
+        private ObservableCollection<Club> _allClubs;
         private Club? _selectedClub;
+        private Club? _filterClub;
         private bool _isLoading;
 
         public ObservableCollection<Club> Clubs
@@ -30,6 +33,19 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public ObservableCollection<Club> AllClubs
+        {
+            get => _allClubs;
+            set
+            {
+                if (_allClubs != value)
+                {
+                    _allClubs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public Club? SelectedClub
         {
             get => _selectedClub;
@@ -39,6 +55,20 @@ namespace ZwembaadManager.ViewModels
                 {
                     _selectedClub = value;
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        public Club? FilterClub
+        {
+            get => _filterClub;
+            set
+            {
+                if (_filterClub != value)
+                {
+                    _filterClub = value;
+                    OnPropertyChanged();
+                    ApplyFilter();
                 }
             }
         }
@@ -59,6 +89,7 @@ namespace ZwembaadManager.ViewModels
         public ICommand LoadClubsCommand { get; }
         public ICommand SaveClubCommand { get; }
         public ICommand DeleteClubCommand { get; }
+        public ICommand ClearFilterCommand { get; }
 
         public event EventHandler<string>? ClubSaved;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -67,10 +98,12 @@ namespace ZwembaadManager.ViewModels
         {
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _clubs = new ObservableCollection<Club>();
+            _allClubs = new ObservableCollection<Club>();
 
             LoadClubsCommand = new RelayCommand(async () => await LoadClubs());
             SaveClubCommand = new RelayCommand(async () => await SaveClub(), () => _selectedClub != null);
             DeleteClubCommand = new RelayCommand(async () => await DeleteClub(), () => _selectedClub != null);
+            ClearFilterCommand = new RelayCommand(() => FilterClub = null);
         }
 
         private async Task LoadClubs()
@@ -79,6 +112,7 @@ namespace ZwembaadManager.ViewModels
             {
                 IsLoading = true;
                 var clubs = await _dataService.LoadClubsAsync();
+                AllClubs = new ObservableCollection<Club>(clubs);
                 Clubs = new ObservableCollection<Club>(clubs);
             }
             catch (Exception ex)
@@ -91,6 +125,19 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        private void ApplyFilter()
+        {
+            if (FilterClub == null)
+            {
+                Clubs = new ObservableCollection<Club>(AllClubs);
+            }
+            else
+            {
+                var filtered = AllClubs.Where(c => c.Id == FilterClub.Id).ToList();
+                Clubs = new ObservableCollection<Club>(filtered);
+            }
+        }
+
         private async Task SaveClub()
         {
             if (SelectedClub == null) return;
@@ -99,7 +146,7 @@ namespace ZwembaadManager.ViewModels
             {
                 IsLoading = true;
                 SelectedClub.ModifiedDate = DateTime.Now;
-                var clubsList = new System.Collections.Generic.List<Club>(Clubs);
+                var clubsList = new System.Collections.Generic.List<Club>(AllClubs);
                 await _dataService.SaveClubsAsync(clubsList);
                 MessageBox.Show("Club succesvol opgeslagen.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
                 ClubSaved?.Invoke(this, $"Club {SelectedClub.Name} opgeslagen");
@@ -124,8 +171,9 @@ namespace ZwembaadManager.ViewModels
             try
             {
                 IsLoading = true;
+                AllClubs.Remove(SelectedClub);
                 Clubs.Remove(SelectedClub);
-                var clubsList = new System.Collections.Generic.List<Club>(Clubs);
+                var clubsList = new System.Collections.Generic.List<Club>(AllClubs);
                 await _dataService.SaveClubsAsync(clubsList);
                 MessageBox.Show("Club succesvol verwijderd.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
                 SelectedClub = null;

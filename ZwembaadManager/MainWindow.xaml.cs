@@ -55,7 +55,6 @@ namespace ZwembaadManager
             dashboardView = new DashboardView();
             dashboardView.OpenViewRequested += Dashboard_OpenViewRequested;
             dashboardView.LogoutRequested += Dashboard_LogoutRequested;
-            dashboardView.RefreshRequested += Dashboard_RefreshRequested;
 
             MainContentArea.Content = dashboardView;
         }
@@ -282,11 +281,6 @@ namespace ZwembaadManager
         private void Dashboard_LogoutRequested(object? sender, EventArgs e)
         {
             ShowLoginView();
-        }
-
-        private void Dashboard_RefreshRequested(object? sender, EventArgs e)
-        {
-            MessageBox.Show("Data refresh functionality will be implemented when JSON data loading is added.");
         }
     }
 }

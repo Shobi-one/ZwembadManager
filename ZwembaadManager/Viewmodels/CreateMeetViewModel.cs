@@ -244,15 +244,15 @@ namespace ZwembaadManager.ViewModels
                     MeetState
                 );
 
-                // Set optional properties
-                if (!string.IsNullOrWhiteSpace(ClubId) && int.TryParse(ClubId, out int clubId))
+                // Set optional properties - NOW USING GUID
+                if (!string.IsNullOrWhiteSpace(ClubId) && Guid.TryParse(ClubId, out Guid clubGuid))
                 {
-                    meet.ClubId = clubId;
+                    meet.ClubId = clubGuid;
                 }
 
-                if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && int.TryParse(SwimmingPoolId, out int poolId))
+                if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && Guid.TryParse(SwimmingPoolId, out Guid poolGuid))
                 {
-                    meet.SwimmingPoolId = poolId;
+                    meet.SwimmingPoolId = poolGuid;
                 }
 
                 meet.TimeRegistration = TimeRegistration.Trim();
@@ -272,14 +272,19 @@ namespace ZwembaadManager.ViewModels
                 // Save to JSON file using JsonDataService
                 await _dataService.AddMeetAsync(meet);
 
-                // Show debug info (remove this in production)
-                MessageBox.Show($"Meet saved to: {_dataService.GetMeetsFilePath()}",
-                    "Debug Info",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
                 // Raise the event with the saved meet
                 MeetSaveRequested?.Invoke(this, new MeetSavedEventArgs(meet));
+                
+                // Clear form after successful save
+                ClearForm();
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Handles duplicate meets
+                MessageBox.Show(ex.Message,
+                    "Validation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
@@ -318,16 +323,16 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(ClubId) && !int.TryParse(ClubId, out _))
+            if (!string.IsNullOrWhiteSpace(ClubId) && !Guid.TryParse(ClubId, out _))
             {
-                MessageBox.Show("Club ID must be a valid number.", "Validation Error",
+                MessageBox.Show("Club ID must be a valid GUID.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && !int.TryParse(SwimmingPoolId, out _))
+            if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && !Guid.TryParse(SwimmingPoolId, out _))
             {
-                MessageBox.Show("Swimming Pool ID must be a valid number.", "Validation Error",
+                MessageBox.Show("Swimming Pool ID must be a valid GUID.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }

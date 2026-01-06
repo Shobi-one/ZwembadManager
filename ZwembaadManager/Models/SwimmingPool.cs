@@ -5,16 +5,17 @@ namespace ZwembaadManager.Models
 {
     public class SwimmingPool
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public decimal PoolLength { get; set; }
         public NumberOfLanes NumberOfLanes { get; set; }
-        public int? AddressId { get; set; }
+        public Guid? AddressId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public SwimmingPool()
         {
+            Id = Guid.NewGuid();
             CreatedDate = DateTime.Now;
             ModifiedDate = DateTime.Now;
         }
