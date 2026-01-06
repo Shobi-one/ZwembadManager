@@ -569,7 +569,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtName" 
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"/>
                         </Grid>
@@ -586,15 +586,11 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <ComboBox Name="cmbPoolLength" 
+                            <ComboBox ItemsSource="{Binding PoolLengths}"
+                                      Text="{Binding PoolLength, UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
                                       Grid.Column="1" 
-                                      Style="{StaticResource ModernComboBoxStyle}"
-                                      IsEditable="True">
-                                <ComboBoxItem Content="25"/>
-                                <ComboBoxItem Content="50"/>
-                                <ComboBoxItem Content="33.3"/>
-                                <ComboBoxItem Content="20"/>
-                            </ComboBox>
+                                      Style="{StaticResource ModernComboBoxStyle}"/>
                         </Grid>
 
                         <!-- Number of Lanes -->
@@ -609,11 +605,12 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <ComboBox Name="cmbNumberOfLanes" 
+                            <ComboBox ItemsSource="{Binding NumberOfLanesOptions}"
+                                      SelectedValue="{Binding NumberOfLanes}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectedValuePath="Value"
                                       Grid.Column="1" 
-                                      Style="{StaticResource ModernComboBoxStyle}"
-                                      DisplayMemberPath="DisplayName" 
-                                      SelectedValuePath="Value"/>
+                                      Style="{StaticResource ModernComboBoxStyle}"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -650,7 +647,7 @@
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Name="txtAddressId" 
+                            <TextBox Text="{Binding AddressId, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="1" 
                                      Style="{StaticResource ModernTextBoxStyle}"
                                      ToolTip="Reference to the address where this swimming pool is located"/>
@@ -672,23 +669,21 @@
                     </Border.Effect>
 
                     <UniformGrid Columns="3" HorizontalAlignment="Center">
-                        <Button Name="btnBackToDashboard" 
-                                Content="← Back to Dashboard" 
-                                Click="BtnBackToDashboard_Click"
+                        <Button Content="← Back to Dashboard" 
+                                Command="{Binding BackToDashboardCommand}"
                                 Style="{StaticResource AeroGlassButtonStyle}"
                                 Width="180"
                                 Height="50"/>
 
-                        <Button Name="btnSave" 
-                                Content="💾 Save Pool" 
-                                Click="BtnSave_Click"
+                        <Button Content="{Binding SaveButtonText}"
+                                Command="{Binding SaveCommand}"
+                                IsEnabled="{Binding IsNotSaving}"
                                 Style="{StaticResource AeroSuccessButtonStyle}"
                                 Width="180"
                                 Height="50"/>
 
-                        <Button Name="btnClear" 
-                                Content="🔄 Clear Form" 
-                                Click="BtnClear_Click"
+                        <Button Content="🔄 Clear Form" 
+                                Command="{Binding ClearCommand}"
                                 Style="{StaticResource AeroActionButtonStyle}"
                                 Width="180"
                                 Height="50"/>
