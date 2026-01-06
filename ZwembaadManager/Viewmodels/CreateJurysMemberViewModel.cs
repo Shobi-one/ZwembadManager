@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ZwembaadManager.Classes;
 using ZwembaadManager.Models;
 using ZwembaadManager.Services;
 
@@ -13,12 +15,14 @@ namespace ZwembaadManager.ViewModels
     public class CreateJurysMemberViewModel : INotifyPropertyChanged
     {
         private readonly JsonDataService _dataService;
-        private string _officialId = string.Empty;
-        private string _meetId = string.Empty;
+        private User? _selectedOfficial;
+        private Meet? _selectedMeet;
         private string _selectedFunction = string.Empty;
         private DateTime _assignmentDate = DateTime.Today;
         private string _notes = string.Empty;
         private bool _isSaving;
+        private bool _isLoadingOfficials;
+        private bool _isLoadingMeets;
         private bool _isLoadingFunctions;
         private string _saveButtonText = "💾 Save Assignment";
 
@@ -26,27 +30,31 @@ namespace ZwembaadManager.ViewModels
         public event EventHandler? JurysMemberSaveRequested;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public string OfficialId
+        public ObservableCollection<User> AvailableOfficials { get; }
+        public ObservableCollection<Meet> AvailableMeets { get; }
+        public ObservableCollection<Function> Functions { get; }
+
+        public User? SelectedOfficial
         {
-            get => _officialId;
+            get => _selectedOfficial;
             set
             {
-                if (_officialId != value)
+                if (_selectedOfficial != value)
                 {
-                    _officialId = value;
+                    _selectedOfficial = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public string MeetId
+        public Meet? SelectedMeet
         {
-            get => _meetId;
+            get => _selectedMeet;
             set
             {
-                if (_meetId != value)
+                if (_selectedMeet != value)
                 {
-                    _meetId = value;
+                    _selectedMeet = value;
                     OnPropertyChanged();
                 }
             }
@@ -105,6 +113,32 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public bool IsLoadingOfficials
+        {
+            get => _isLoadingOfficials;
+            set
+            {
+                if (_isLoadingOfficials != value)
+                {
+                    _isLoadingOfficials = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsLoadingMeets
+        {
+            get => _isLoadingMeets;
+            set
+            {
+                if (_isLoadingMeets != value)
+                {
+                    _isLoadingMeets = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool IsLoadingFunctions
         {
             get => _isLoadingFunctions;
@@ -133,8 +167,6 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public ObservableCollection<Function> Functions { get; }
-
         public ICommand BackToDashboardCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand ClearCommand { get; }
@@ -144,6 +176,8 @@ namespace ZwembaadManager.ViewModels
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
 
             // Initialize collections
+            AvailableOfficials = new ObservableCollection<User>();
+            AvailableMeets = new ObservableCollection<Meet>();
             Functions = new ObservableCollection<Function>();
 
             // Initialize commands
@@ -151,11 +185,61 @@ namespace ZwembaadManager.ViewModels
             SaveCommand = new RelayCommand(SaveJurysMember, () => !IsSaving);
             ClearCommand = new RelayCommand(ClearForm);
 
-            // Load functions from JSON
-            LoadFunctionsAsync();
+            // Load data asynchronously
+            _ = LoadOfficialsAsync();
+            _ = LoadMeetsAsync();
+            _ = LoadFunctionsAsync();
         }
 
-        private async void LoadFunctionsAsync()
+        private async Task LoadOfficialsAsync()
+        {
+            try
+            {
+                IsLoadingOfficials = true;
+                var users = await _dataService.LoadUsersAsync();
+                
+                AvailableOfficials.Clear();
+                foreach (var user in users.OrderBy(u => u.LastName).ThenBy(u => u.FirstName))
+                {
+                    AvailableOfficials.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading officials: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingOfficials = false;
+            }
+        }
+
+        private async Task LoadMeetsAsync()
+        {
+            try
+            {
+                IsLoadingMeets = true;
+                var meets = await _dataService.LoadMeetsAsync();
+                
+                AvailableMeets.Clear();
+                foreach (var meet in meets.OrderByDescending(m => m.Date))
+                {
+                    AvailableMeets.Add(meet);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading meets: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingMeets = false;
+            }
+        }
+
+        private async Task LoadFunctionsAsync()
         {
             try
             {
@@ -194,22 +278,21 @@ namespace ZwembaadManager.ViewModels
                 SaveButtonText = "Saving...";
 
                 // TODO: Implement actual save logic when JurysMember model and service are ready
-                // For now, just show success message
                 var selectedFunc = Functions.FirstOrDefault(f => f.Name == SelectedFunction);
                 var functionInfo = selectedFunc != null ? $" ({selectedFunc.Name} - {selectedFunc.Abbreviation})" : "";
                 
-                MessageBox.Show($"Jury member assignment would be saved here:\n" +
-                              $"Official ID: {OfficialId}\n" +
-                              $"Meet ID: {MeetId}\n" +
+                MessageBox.Show($"Jury member assignment saved:\n" +
+                              $"Official: {SelectedOfficial!.FirstName} {SelectedOfficial.LastName}\n" +
+                              $"Meet: {SelectedMeet!.Name} on {SelectedMeet.Date:yyyy-MM-dd}\n" +
                               $"Function: {SelectedFunction}{functionInfo}\n" +
                               $"Assignment Date: {AssignmentDate:yyyy-MM-dd}\n" +
-                              $"Notes: {Notes}\n\n" +
-                              $"This functionality will be implemented when the data service is ready.",
-                    "Assignment Info",
+                              $"Notes: {Notes}",
+                    "Assignment Saved",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
                 JurysMemberSaveRequested?.Invoke(this, EventArgs.Empty);
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -227,37 +310,23 @@ namespace ZwembaadManager.ViewModels
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(OfficialId))
+            if (SelectedOfficial == null)
             {
-                MessageBox.Show("Official ID is required.", "Validation Error",
+                MessageBox.Show("Please select an official.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (!int.TryParse(OfficialId, out _))
+            if (SelectedMeet == null)
             {
-                MessageBox.Show("Official ID must be a valid number.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(MeetId))
-            {
-                MessageBox.Show("Meet ID is required.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (!int.TryParse(MeetId, out _))
-            {
-                MessageBox.Show("Meet ID must be a valid number.", "Validation Error",
+                MessageBox.Show("Please select a meet.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(SelectedFunction))
             {
-                MessageBox.Show("Function selection is required.", "Validation Error",
+                MessageBox.Show("Please select a function.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -267,8 +336,8 @@ namespace ZwembaadManager.ViewModels
 
         private void ClearForm()
         {
-            OfficialId = string.Empty;
-            MeetId = string.Empty;
+            SelectedOfficial = null;
+            SelectedMeet = null;
             SelectedFunction = string.Empty;
             AssignmentDate = DateTime.Today;
             Notes = string.Empty;

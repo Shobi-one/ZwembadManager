@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ZwembaadManager.Classes;
+using ZwembaadManager.Models;
 using ZwembaadManager.Services;
 
 namespace ZwembaadManager.ViewModels
@@ -11,13 +15,15 @@ namespace ZwembaadManager.ViewModels
     public class CreateUsersFunctionViewModel : INotifyPropertyChanged
     {
         private readonly JsonDataService _dataService;
-        private string _userId = string.Empty;
-        private string _functionId = string.Empty;
+        private User? _selectedUser;
+        private Function? _selectedFunction;
         private string _status = "Active";
         private DateTime _startDate = DateTime.Today;
         private DateTime? _endDate;
         private string _remarks = string.Empty;
         private bool _isSaving;
+        private bool _isLoadingUsers;
+        private bool _isLoadingFunctions;
         private string _saveButtonText = "💾 Save Assignment";
 
         public event EventHandler? BackToDashboardRequested;
@@ -25,28 +31,30 @@ namespace ZwembaadManager.ViewModels
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<string> Statuses { get; }
+        public ObservableCollection<User> AvailableUsers { get; }
+        public ObservableCollection<Function> AvailableFunctions { get; }
 
-        public string UserId
+        public User? SelectedUser
         {
-            get => _userId;
+            get => _selectedUser;
             set
             {
-                if (_userId != value)
+                if (_selectedUser != value)
                 {
-                    _userId = value;
+                    _selectedUser = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public string FunctionId
+        public Function? SelectedFunction
         {
-            get => _functionId;
+            get => _selectedFunction;
             set
             {
-                if (_functionId != value)
+                if (_selectedFunction != value)
                 {
-                    _functionId = value;
+                    _selectedFunction = value;
                     OnPropertyChanged();
                 }
             }
@@ -118,6 +126,32 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public bool IsLoadingUsers
+        {
+            get => _isLoadingUsers;
+            set
+            {
+                if (_isLoadingUsers != value)
+                {
+                    _isLoadingUsers = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsLoadingFunctions
+        {
+            get => _isLoadingFunctions;
+            set
+            {
+                if (_isLoadingFunctions != value)
+                {
+                    _isLoadingFunctions = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool IsNotSaving => !IsSaving;
 
         public string SaveButtonText
@@ -150,10 +184,65 @@ namespace ZwembaadManager.ViewModels
                 "Suspended"
             };
 
+            AvailableUsers = new ObservableCollection<User>();
+            AvailableFunctions = new ObservableCollection<Function>();
+
             // Initialize commands
             BackToDashboardCommand = new RelayCommand(() => BackToDashboardRequested?.Invoke(this, EventArgs.Empty));
             SaveCommand = new RelayCommand(SaveUsersFunction, () => !IsSaving);
             ClearCommand = new RelayCommand(ClearForm);
+
+            // Load data asynchronously
+            _ = LoadUsersAsync();
+            _ = LoadFunctionsAsync();
+        }
+
+        private async Task LoadUsersAsync()
+        {
+            try
+            {
+                IsLoadingUsers = true;
+                var users = await _dataService.LoadUsersAsync();
+
+                AvailableUsers.Clear();
+                foreach (var user in users.OrderBy(u => u.LastName).ThenBy(u => u.FirstName))
+                {
+                    AvailableUsers.Add(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading users: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingUsers = false;
+            }
+        }
+
+        private async Task LoadFunctionsAsync()
+        {
+            try
+            {
+                IsLoadingFunctions = true;
+                var functions = await _dataService.LoadFunctionsAsync();
+
+                AvailableFunctions.Clear();
+                foreach (var function in functions.OrderBy(f => f.Name))
+                {
+                    AvailableFunctions.Add(function);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading functions: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingFunctions = false;
+            }
         }
 
         private void SaveUsersFunction()
@@ -170,12 +259,18 @@ namespace ZwembaadManager.ViewModels
 
                 // TODO: Create UsersFunction model and save to data service when model is ready
                 // For now, just show success message
-                MessageBox.Show($"User Function assignment saved:\nUser ID: {UserId}\nFunction ID: {FunctionId}\nStatus: {Status}\nStart Date: {StartDate:yyyy-MM-dd}",
+                MessageBox.Show($"User Function assignment saved:\n" +
+                              $"User: {SelectedUser!.FirstName} {SelectedUser.LastName}\n" +
+                              $"Function: {SelectedFunction!.Name} ({SelectedFunction.Abbreviation})\n" +
+                              $"Status: {Status}\n" +
+                              $"Start Date: {StartDate:yyyy-MM-dd}\n" +
+                              $"End Date: {(EndDate.HasValue ? EndDate.Value.ToString("yyyy-MM-dd") : "N/A")}",
                     "Save Placeholder",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
                 UsersFunctionSaveRequested?.Invoke(this, EventArgs.Empty);
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -193,30 +288,16 @@ namespace ZwembaadManager.ViewModels
 
         private bool ValidateForm()
         {
-            if (string.IsNullOrWhiteSpace(UserId))
+            if (SelectedUser == null)
             {
-                MessageBox.Show("User ID is required.", "Validation Error",
+                MessageBox.Show("Please select a user.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (!Guid.TryParse(UserId, out _))
+            if (SelectedFunction == null)
             {
-                MessageBox.Show("User ID must be a valid GUID.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(FunctionId))
-            {
-                MessageBox.Show("Function ID is required.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (!Guid.TryParse(FunctionId, out _))
-            {
-                MessageBox.Show("Function ID must be a valid GUID.", "Validation Error",
+                MessageBox.Show("Please select a function.", "Validation Error",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
@@ -240,8 +321,8 @@ namespace ZwembaadManager.ViewModels
 
         private void ClearForm()
         {
-            UserId = string.Empty;
-            FunctionId = string.Empty;
+            SelectedUser = null;
+            SelectedFunction = null;
             Status = "Active";
             StartDate = DateTime.Today;
             EndDate = null;

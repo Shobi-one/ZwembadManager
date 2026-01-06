@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ZwembaadManager.Classes;
 using ZwembaadManager.Classes.Enum;
 using ZwembaadManager.Events;
 using ZwembaadManager.Extensions;
@@ -20,8 +21,9 @@ namespace ZwembaadManager.ViewModels
         private string _name = string.Empty;
         private string _poolLength = string.Empty;
         private NumberOfLanes? _numberOfLanes;
-        private string _addressId = string.Empty;
+        private Address? _selectedAddress;
         private bool _isSaving;
+        private bool _isLoadingAddresses;
         private string _saveButtonText = "💾 Save Pool";
 
         public event EventHandler? BackToDashboardRequested;
@@ -30,6 +32,7 @@ namespace ZwembaadManager.ViewModels
 
         public ObservableCollection<string> PoolLengths { get; }
         public ObservableCollection<NumberOfLanesOption> NumberOfLanesOptions { get; }
+        public ObservableCollection<Address> AvailableAddresses { get; }
 
         public string Name
         {
@@ -70,14 +73,14 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public string AddressId
+        public Address? SelectedAddress
         {
-            get => _addressId;
+            get => _selectedAddress;
             set
             {
-                if (_addressId != value)
+                if (_selectedAddress != value)
                 {
-                    _addressId = value;
+                    _selectedAddress = value;
                     OnPropertyChanged();
                 }
             }
@@ -93,6 +96,19 @@ namespace ZwembaadManager.ViewModels
                     _isSaving = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsNotSaving));
+                }
+            }
+        }
+
+        public bool IsLoadingAddresses
+        {
+            get => _isLoadingAddresses;
+            set
+            {
+                if (_isLoadingAddresses != value)
+                {
+                    _isLoadingAddresses = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -138,10 +154,39 @@ namespace ZwembaadManager.ViewModels
                     })
             );
 
+            AvailableAddresses = new ObservableCollection<Address>();
+
             // Initialize commands
             BackToDashboardCommand = new RelayCommand(() => BackToDashboardRequested?.Invoke(this, EventArgs.Empty));
             SaveCommand = new RelayCommand(async () => await SaveSwimmingPool(), () => !IsSaving);
             ClearCommand = new RelayCommand(ClearForm);
+
+            // Load addresses from JSON
+            _ = LoadAddressesAsync();
+        }
+
+        private async Task LoadAddressesAsync()
+        {
+            try
+            {
+                IsLoadingAddresses = true;
+                var addresses = await _dataService.LoadAddressesAsync();
+                
+                AvailableAddresses.Clear();
+                foreach (var address in addresses.OrderBy(a => a.Street))
+                {
+                    AvailableAddresses.Add(address);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading addresses: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingAddresses = false;
+            }
         }
 
         private async Task SaveSwimmingPool()
@@ -166,10 +211,10 @@ namespace ZwembaadManager.ViewModels
                     NumberOfLanes!.Value
                 );
 
-                // Set optional AddressId - NOW USING GUID
-                if (!string.IsNullOrWhiteSpace(AddressId) && Guid.TryParse(AddressId, out Guid addressGuid))
+                // Set optional AddressId from selected address
+                if (SelectedAddress != null)
                 {
-                    swimmingPool.AddressId = addressGuid;
+                    swimmingPool.AddressId = SelectedAddress.Id;
                 }
 
                 // Save to JSON file using JsonDataService
@@ -233,13 +278,6 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(AddressId) && !Guid.TryParse(AddressId, out _))
-            {
-                MessageBox.Show("Address ID must be a valid GUID.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
             return true;
         }
 
@@ -248,7 +286,7 @@ namespace ZwembaadManager.ViewModels
             Name = string.Empty;
             PoolLength = string.Empty;
             NumberOfLanes = null;
-            AddressId = string.Empty;
+            SelectedAddress = null;
             SaveButtonText = "💾 Save Pool";
         }
 

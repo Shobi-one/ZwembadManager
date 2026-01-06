@@ -386,6 +386,9 @@
             <Setter Property="BorderBrush" Value="#B0C4DE"/>
             <Setter Property="Background" Value="White"/>
         </Style>
+
+        <!-- Boolean to Visibility Converter -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -552,38 +555,81 @@
                                    Foreground="DarkBlue"
                                    Margin="0,0,0,25"/>
 
-                        <!-- Official ID -->
+                        <!-- Official Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Official ID:" 
+                            <TextBlock Text="Official:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding OfficialId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableOfficials}"
+                                          SelectedItem="{Binding SelectedOfficial}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="👤 " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding LastName}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=", " FontWeight="SemiBold" Margin="0,0,3,0"/>
+                                                <TextBlock Text="{Binding FirstName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading officials..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingOfficials, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
 
-                        <!-- Meet ID -->
+                        <!-- Meet Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Meet ID:" 
+                            <TextBlock Text="Meet:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding MeetId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableMeets}"
+                                          SelectedItem="{Binding SelectedMeet}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="🏅 " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" (" Foreground="Gray" Margin="5,0,0,0"/>
+                                                <TextBlock Text="{Binding Date, StringFormat='{}{0:yyyy-MM-dd}'}" Foreground="Gray"/>
+                                                <TextBlock Text=")" Foreground="Gray"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading meets..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingMeets, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
                     </StackPanel>
                 </Border>

@@ -57,7 +57,6 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public ICommand LoadFunctionsCommand { get; }
         public ICommand SaveFunctionCommand { get; }
         public ICommand DeleteFunctionCommand { get; }
 
@@ -68,9 +67,9 @@ namespace ZwembaadManager.ViewModels
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _functions = new ObservableCollection<Function>();
 
-            LoadFunctionsCommand = new RelayCommand(async () => await LoadFunctions());
             SaveFunctionCommand = new RelayCommand(async () => await SaveFunction(), () => _selectedFunction != null);
             DeleteFunctionCommand = new RelayCommand(async () => await DeleteFunction(), () => _selectedFunction != null);
+            _ = LoadFunctions();
         }
 
         private async Task LoadFunctions()

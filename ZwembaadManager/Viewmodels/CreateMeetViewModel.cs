@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,13 +19,15 @@ namespace ZwembaadManager.ViewModels
         private DateTime _date = DateTime.Today;
         private string? _partOfTheDay;
         private string _meetState = "Planned";
-        private string _clubId = string.Empty;
-        private string _swimmingPoolId = string.Empty;
+        private Club? _selectedClub;
+        private SwimmingPool? _selectedSwimmingPool;
         private string _timeRegistration = string.Empty;
         private string _numberOfInternships = string.Empty;
         private string _numberOfExams = string.Empty;
         private string _remarks = string.Empty;
         private bool _isSaving;
+        private bool _isLoadingClubs;
+        private bool _isLoadingPools;
         private string _saveButtonText = "💾 Save Meet";
 
         public event EventHandler? BackToDashboardRequested;
@@ -33,6 +36,8 @@ namespace ZwembaadManager.ViewModels
 
         public ObservableCollection<string> PartsOfDay { get; }
         public ObservableCollection<string> MeetStates { get; }
+        public ObservableCollection<Club> AvailableClubs { get; }
+        public ObservableCollection<SwimmingPool> AvailableSwimmingPools { get; }
 
         public string Name
         {
@@ -86,27 +91,27 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public string ClubId
+        public Club? SelectedClub
         {
-            get => _clubId;
+            get => _selectedClub;
             set
             {
-                if (_clubId != value)
+                if (_selectedClub != value)
                 {
-                    _clubId = value;
+                    _selectedClub = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public string SwimmingPoolId
+        public SwimmingPool? SelectedSwimmingPool
         {
-            get => _swimmingPoolId;
+            get => _selectedSwimmingPool;
             set
             {
-                if (_swimmingPoolId != value)
+                if (_selectedSwimmingPool != value)
                 {
-                    _swimmingPoolId = value;
+                    _selectedSwimmingPool = value;
                     OnPropertyChanged();
                 }
             }
@@ -178,6 +183,32 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public bool IsLoadingClubs
+        {
+            get => _isLoadingClubs;
+            set
+            {
+                if (_isLoadingClubs != value)
+                {
+                    _isLoadingClubs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool IsLoadingPools
+        {
+            get => _isLoadingPools;
+            set
+            {
+                if (_isLoadingPools != value)
+                {
+                    _isLoadingPools = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public bool IsNotSaving => !IsSaving;
 
         public string SaveButtonText
@@ -218,10 +249,65 @@ namespace ZwembaadManager.ViewModels
                 "Cancelled"
             };
 
+            AvailableClubs = new ObservableCollection<Club>();
+            AvailableSwimmingPools = new ObservableCollection<SwimmingPool>();
+
             // Initialize commands
             BackToDashboardCommand = new RelayCommand(() => BackToDashboardRequested?.Invoke(this, EventArgs.Empty));
             SaveCommand = new RelayCommand(async () => await SaveMeet(), () => !IsSaving);
             ClearCommand = new RelayCommand(ClearForm);
+
+            // Load data asynchronously
+            _ = LoadClubsAsync();
+            _ = LoadSwimmingPoolsAsync();
+        }
+
+        private async Task LoadClubsAsync()
+        {
+            try
+            {
+                IsLoadingClubs = true;
+                var clubs = await _dataService.LoadClubsAsync();
+                
+                AvailableClubs.Clear();
+                foreach (var club in clubs.OrderBy(c => c.Name))
+                {
+                    AvailableClubs.Add(club);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading clubs: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingClubs = false;
+            }
+        }
+
+        private async Task LoadSwimmingPoolsAsync()
+        {
+            try
+            {
+                IsLoadingPools = true;
+                var pools = await _dataService.LoadSwimmingPoolsAsync();
+                
+                AvailableSwimmingPools.Clear();
+                foreach (var pool in pools.OrderBy(p => p.Name))
+                {
+                    AvailableSwimmingPools.Add(pool);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading swimming pools: {ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                IsLoadingPools = false;
+            }
         }
 
         private async Task SaveMeet()
@@ -244,15 +330,15 @@ namespace ZwembaadManager.ViewModels
                     MeetState
                 );
 
-                // Set optional properties - NOW USING GUID
-                if (!string.IsNullOrWhiteSpace(ClubId) && Guid.TryParse(ClubId, out Guid clubGuid))
+                // Set optional properties using selected objects
+                if (SelectedClub != null)
                 {
-                    meet.ClubId = clubGuid;
+                    meet.ClubId = SelectedClub.Id;
                 }
 
-                if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && Guid.TryParse(SwimmingPoolId, out Guid poolGuid))
+                if (SelectedSwimmingPool != null)
                 {
-                    meet.SwimmingPoolId = poolGuid;
+                    meet.SwimmingPoolId = SelectedSwimmingPool.Id;
                 }
 
                 meet.TimeRegistration = TimeRegistration.Trim();
@@ -323,20 +409,6 @@ namespace ZwembaadManager.ViewModels
                 return false;
             }
 
-            if (!string.IsNullOrWhiteSpace(ClubId) && !Guid.TryParse(ClubId, out _))
-            {
-                MessageBox.Show("Club ID must be a valid GUID.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (!string.IsNullOrWhiteSpace(SwimmingPoolId) && !Guid.TryParse(SwimmingPoolId, out _))
-            {
-                MessageBox.Show("Swimming Pool ID must be a valid GUID.", "Validation Error",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
             if (!string.IsNullOrWhiteSpace(NumberOfInternships) && !int.TryParse(NumberOfInternships, out _))
             {
                 MessageBox.Show("Number of Internships must be a valid number.", "Validation Error",
@@ -360,8 +432,8 @@ namespace ZwembaadManager.ViewModels
             Date = DateTime.Today;
             PartOfTheDay = null;
             MeetState = "Planned";
-            ClubId = string.Empty;
-            SwimmingPoolId = string.Empty;
+            SelectedClub = null;
+            SelectedSwimmingPool = null;
             TimeRegistration = string.Empty;
             NumberOfInternships = string.Empty;
             NumberOfExams = string.Empty;

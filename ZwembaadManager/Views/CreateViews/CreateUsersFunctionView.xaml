@@ -386,6 +386,7 @@
             <Setter Property="BorderBrush" Value="#B0C4DE"/>
             <Setter Property="Background" Value="White"/>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -552,38 +553,84 @@
                                    Foreground="DarkBlue"
                                    Margin="0,0,0,25"/>
 
-                        <!-- User ID -->
+                        <!-- User Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="User ID:" 
+                            <TextBlock Text="User:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableUsers}"
+                                          SelectedItem="{Binding SelectedUser}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="👤 " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding LastName}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=", " FontWeight="SemiBold" Margin="0,0,3,0"/>
+                                                <TextBlock Text="{Binding FirstName}"/>
+                                                <TextBlock Text=" (" Foreground="Gray" Margin="5,0,0,0"/>
+                                                <TextBlock Text="{Binding Email}" Foreground="Gray" FontSize="12"/>
+                                                <TextBlock Text=")" Foreground="Gray"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading users..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingUsers, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
 
-                        <!-- Function ID -->
+                        <!-- Function Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Function ID:" 
+                            <TextBlock Text="Function:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding FunctionId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableFunctions}"
+                                          SelectedItem="{Binding SelectedFunction}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="⚙️ " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" (" Foreground="Gray" Margin="5,0,0,0"/>
+                                                <TextBlock Text="{Binding Abbreviation}" Foreground="Gray"/>
+                                                <TextBlock Text=")" Foreground="Gray"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading functions..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingFunctions, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
 
                         <!-- Status -->

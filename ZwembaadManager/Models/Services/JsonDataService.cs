@@ -18,6 +18,7 @@ namespace ZwembaadManager.Services
         private readonly string _meetsFilePath;
         private readonly string _swimmingPoolsFilePath;
         private readonly string _functionsFilePath;
+        private readonly string _addressesFilePath;
         
         public JsonDataService()
         {
@@ -44,6 +45,7 @@ namespace ZwembaadManager.Services
             _meetsFilePath = Path.Combine(resourcesPath, "Meets.json");
             _swimmingPoolsFilePath = Path.Combine(resourcesPath, "SwimmingPools.json");
             _functionsFilePath = Path.Combine(resourcesPath, "Functions.json");
+            _addressesFilePath = Path.Combine(resourcesPath, "Addresses.json");
             Directory.CreateDirectory(resourcesPath);
             
             InitializeUsersFileIfNeeded();
@@ -51,6 +53,7 @@ namespace ZwembaadManager.Services
             InitializeMeetsFileIfNeeded();
             InitializeSwimmingPoolsFileIfNeeded();
             InitializeFunctionsFileIfNeeded();
+            InitializeAddressesFileIfNeeded();
         }
 
         private void InitializeUsersFileIfNeeded()
@@ -154,6 +157,27 @@ namespace ZwembaadManager.Services
                 else
                 {
                     File.WriteAllText(_functionsFilePath, "[]");
+                }
+            }
+        }
+
+        private void InitializeAddressesFileIfNeeded()
+        {
+            if (!File.Exists(_addressesFilePath))
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "ZwembaadManager.Resources.Addresses.json";
+                
+                using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream != null)
+                {
+                    using var reader = new StreamReader(stream);
+                    string content = reader.ReadToEnd();
+                    File.WriteAllText(_addressesFilePath, content);
+                }
+                else
+                {
+                    File.WriteAllText(_addressesFilePath, "[]");
                 }
             }
         }
@@ -477,11 +501,78 @@ namespace ZwembaadManager.Services
             await SaveFunctionsAsync(functions);
         }
 
+        // Address-related methods
+        public async Task<List<Address>> LoadAddressesAsync()
+        {
+            try
+            {
+                if (!File.Exists(_addressesFilePath))
+                {
+                    return new List<Address>();
+                }
+
+                string jsonContent = await File.ReadAllTextAsync(_addressesFilePath);
+                var addresses = JsonSerializer.Deserialize<List<Address>>(jsonContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                
+                return addresses ?? new List<Address>();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to load addresses: {ex.Message}", ex);
+            }
+        }
+
+        public async Task SaveAddressesAsync(List<Address> addresses)
+        {
+            try
+            {
+                string jsonContent = JsonSerializer.Serialize(addresses, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                
+                await File.WriteAllTextAsync(_addressesFilePath, jsonContent);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to save addresses: {ex.Message}", ex);
+            }
+        }
+
+        public async Task AddAddressAsync(Address newAddress)
+        {
+            var addresses = await LoadAddressesAsync();
+            
+            // Check for duplicates (same street, house number, and zip code)
+            var existingAddress = addresses.Find(a => 
+                a.Street.Equals(newAddress.Street, StringComparison.OrdinalIgnoreCase) &&
+                a.HouseNumber.Equals(newAddress.HouseNumber, StringComparison.OrdinalIgnoreCase) &&
+                a.ZipCodeCity.Equals(newAddress.ZipCodeCity, StringComparison.OrdinalIgnoreCase));
+            
+            if (existingAddress != null)
+            {
+                throw new InvalidOperationException($"An address '{newAddress.Street} {newAddress.HouseNumber}, {newAddress.ZipCodeCity}' already exists.");
+            }
+
+            // Ensure new GUID if not set
+            if (newAddress.Id == Guid.Empty)
+            {
+                newAddress.Id = Guid.NewGuid();
+            }
+            
+            addresses.Add(newAddress);
+            await SaveAddressesAsync(addresses);
+        }
+
         // File path getters
         public string GetUsersFilePath() => _usersFilePath;
         public string GetClubsFilePath() => _clubsFilePath;
         public string GetMeetsFilePath() => _meetsFilePath;
         public string GetSwimmingPoolsFilePath() => _swimmingPoolsFilePath;
         public string GetFunctionsFilePath() => _functionsFilePath;
+        public string GetAddressesFilePath() => _addressesFilePath;
     }
 }

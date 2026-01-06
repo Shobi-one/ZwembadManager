@@ -1,0 +1,32 @@
+[
+  {
+    "Id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "Street": "Ottergemsesteenweg",
+    "HouseNumber": "104",
+    "ZipCodeCity": "9000 Gent"
+  },
+  {
+    "Id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "Street": "Kortrijksesteenweg",
+    "HouseNumber": "256",
+    "ZipCodeCity": "9000 Gent"
+  },
+  {
+    "Id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "Street": "Mariakerkelaan",
+    "HouseNumber": "88",
+    "ZipCodeCity": "9030 Mariakerke"
+  },
+  {
+    "Id": "d4e5f6a7-b8c9-0123-def1-234567890123",
+    "Street": "Drongenplein",
+    "HouseNumber": "15",
+    "ZipCodeCity": "9031 Drongen"
+  },
+  {
+    "Id": "e5f6a7b8-c9d0-1234-ef12-345678901234",
+    "Street": "Wondelgemstraat",
+    "HouseNumber": "42",
+    "ZipCodeCity": "9032 Wondelgem"
+  }
+]

@@ -57,7 +57,6 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public ICommand LoadUsersCommand { get; }
         public ICommand SaveUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
 
@@ -68,9 +67,9 @@ namespace ZwembaadManager.ViewModels
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _users = new ObservableCollection<User>();
 
-            LoadUsersCommand = new RelayCommand(async () => await LoadUsers());
             SaveUserCommand = new RelayCommand(async () => await SaveUser(), () => _selectedUser != null);
             DeleteUserCommand = new RelayCommand(async () => await DeleteUser(), () => _selectedUser != null);
+            _ = LoadUsers();
         }
 
         private async Task LoadUsers()

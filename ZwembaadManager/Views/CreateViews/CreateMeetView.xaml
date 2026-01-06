@@ -386,6 +386,9 @@
             <Setter Property="BorderBrush" Value="#B0C4DE"/>
             <Setter Property="Background" Value="White"/>
         </Style>
+
+        <!-- Boolean to Visibility Converter -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -644,38 +647,82 @@
                                    Foreground="DarkBlue"
                                    Margin="0,0,0,25"/>
 
-                        <!-- Club ID -->
+                        <!-- Club Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Club ID:" 
+                            <TextBlock Text="Club:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding ClubId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableClubs}"
+                                          SelectedItem="{Binding SelectedClub}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="🏛️ " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" (" Foreground="Gray" Margin="5,0,0,0"/>
+                                                <TextBlock Text="{Binding Abbreviation}" Foreground="Gray"/>
+                                                <TextBlock Text=")" Foreground="Gray"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading clubs..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingClubs, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
 
-                        <!-- Swimming Pool ID -->
+                        <!-- Swimming Pool Selection (WITH DROPDOWN) -->
                         <Grid Margin="0,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Swimming Pool ID:" 
+                            <TextBlock Text="Swimming Pool:" 
                                        Grid.Column="0" 
                                        VerticalAlignment="Center" 
                                        FontWeight="SemiBold"
                                        FontSize="14"
                                        Foreground="#003366"/>
-                            <TextBox Text="{Binding SwimmingPoolId, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="1" 
-                                     Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Grid Grid.Column="1">
+                                <ComboBox ItemsSource="{Binding AvailableSwimmingPools}"
+                                          SelectedItem="{Binding SelectedSwimmingPool}"
+                                          Style="{StaticResource ModernComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="🏊 " FontSize="14" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                                                <TextBlock Text=" (" Foreground="Gray" Margin="5,0,0,0"/>
+                                                <TextBlock Text="{Binding PoolLength}" Foreground="Gray"/>
+                                                <TextBlock Text="m)" Foreground="Gray"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                
+                                <!-- Loading Indicator -->
+                                <TextBlock Text="⏳ Loading pools..." 
+                                           Foreground="Gray"
+                                           FontStyle="Italic"
+                                           Margin="12,10"
+                                           VerticalAlignment="Center"
+                                           Visibility="{Binding IsLoadingPools, Converter={StaticResource BoolToVisConverter}}"/>
+                            </Grid>
                         </Grid>
                     </StackPanel>
                 </Border>

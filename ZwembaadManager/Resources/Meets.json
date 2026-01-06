@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "Id": "a2235c13-f033-4220-868d-4cbdd9e2fd38",
+    "Name": "Test",
+    "Date": "2026-01-06T00:00:00+01:00",
+    "PartOfTheDay": "Morning",
+    "MeetState": "Planned",
+    "ClubId": "2fb0aaaf-6781-4ac5-ab70-39efd1aa87cf",
+    "SwimmingPoolId": "f2bf2d2c-e138-4de5-9b04-8212b000031a",
+    "TimeRegistration": "Early Morning",
+    "NumberOfInternships": 0,
+    "NumberOfExams": 2,
+    "Remarks": "",
+    "CreatedDate": "2026-01-06T18:45:12.3153585+01:00",
+    "ModifiedDate": "2026-01-06T18:45:12.3153604+01:00"
+  }
+]

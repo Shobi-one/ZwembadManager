@@ -393,35 +393,18 @@
                         <DropShadowEffect Color="Gray" Direction="320" ShadowDepth="5" Opacity="0.5"/>
                     </Border.Effect>
 
-                    <Grid Margin="35,20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock FontSize="32" 
-                                       FontWeight="Bold" 
-                                       Margin="0,0,0,4">
-                                <Run Text="🏊" FontSize="36"/>
-                                <Run Text="Zwembaden Beheer" Foreground="DarkBlue"/>
-                            </TextBlock>
-                            <TextBlock Text="Manage swimming pool facilities and infrastructure" 
-                                       FontSize="15" 
-                                       Foreground="#555"
-                                       FontStyle="Italic"/>
-                        </StackPanel>
-
-                        <StackPanel Grid.Column="1" 
-                                    Orientation="Horizontal" 
-                                    VerticalAlignment="Center">
-                            <Button Content="📥 Zwembaden Laden" 
-                                    Command="{Binding LoadSwimmingPoolsCommand}" 
-                                    Style="{StaticResource AeroGlassButtonStyle}"
-                                    Width="200" 
-                                    Height="40"/>
-                        </StackPanel>
-                    </Grid>
+                    <StackPanel Margin="35,20" VerticalAlignment="Center">
+                        <TextBlock FontSize="32" 
+                                   FontWeight="Bold" 
+                                   Margin="0,0,0,4">
+                            <Run Text="🏊" FontSize="36"/>
+                            <Run Text="Zwembaden Beheer" Foreground="DarkBlue"/>
+                        </TextBlock>
+                        <TextBlock Text="Manage swimming pool facilities and infrastructure" 
+                                   FontSize="15" 
+                                   Foreground="#555"
+                                   FontStyle="Italic"/>
+                    </StackPanel>
                 </Border>
 
                 <!-- Main Content Section -->

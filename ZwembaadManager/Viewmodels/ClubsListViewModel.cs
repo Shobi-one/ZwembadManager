@@ -86,7 +86,6 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public ICommand LoadClubsCommand { get; }
         public ICommand SaveClubCommand { get; }
         public ICommand DeleteClubCommand { get; }
         public ICommand ClearFilterCommand { get; }
@@ -100,10 +99,10 @@ namespace ZwembaadManager.ViewModels
             _clubs = new ObservableCollection<Club>();
             _allClubs = new ObservableCollection<Club>();
 
-            LoadClubsCommand = new RelayCommand(async () => await LoadClubs());
             SaveClubCommand = new RelayCommand(async () => await SaveClub(), () => _selectedClub != null);
             DeleteClubCommand = new RelayCommand(async () => await DeleteClub(), () => _selectedClub != null);
             ClearFilterCommand = new RelayCommand(() => FilterClub = null);
+            _ = LoadClubs();
         }
 
         private async Task LoadClubs()

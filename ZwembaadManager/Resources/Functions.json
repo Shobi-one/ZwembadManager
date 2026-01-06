@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "Id": "c04a31f7-a47c-4984-9f1f-aeb5d7af9b9e",
+    "Name": "Test",
+    "Abbreviation": "T.T",
+    "CreatedDate": "2026-01-06T18:47:54.8743843+01:00",
+    "ModifiedDate": "2026-01-06T18:47:54.8743851+01:00"
+  }
+]

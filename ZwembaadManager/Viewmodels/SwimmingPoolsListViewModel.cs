@@ -57,7 +57,6 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
-        public ICommand LoadSwimmingPoolsCommand { get; }
         public ICommand SaveSwimmingPoolCommand { get; }
         public ICommand DeleteSwimmingPoolCommand { get; }
 
@@ -69,9 +68,9 @@ namespace ZwembaadManager.ViewModels
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _swimmingPools = new ObservableCollection<SwimmingPool>();
 
-            LoadSwimmingPoolsCommand = new RelayCommand(async () => await LoadSwimmingPools());
             SaveSwimmingPoolCommand = new RelayCommand(async () => await SaveSwimmingPool(), () => _selectedSwimmingPool != null);
             DeleteSwimmingPoolCommand = new RelayCommand(async () => await DeleteSwimmingPool(), () => _selectedSwimmingPool != null);
+            _ = LoadSwimmingPools();
         }
 
         private async Task LoadSwimmingPools()
