@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ZwembaadManager.Views"
+             xmlns:helpers="clr-namespace:ZwembaadManager.Helpers;assembly=ZwembaadManager.Models"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding LoginCommand}"/>
+    </UserControl.InputBindings>
+
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -623,7 +628,11 @@
                                  FontSize="14"
                                  Padding="8"
                                  BorderBrush="LightGray"
-                                 BorderThickness="1"/>
+                                 BorderThickness="1">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
                     </StackPanel>
 
                     <StackPanel Grid.Row="2" Margin="0,0,0,25">
@@ -632,21 +641,27 @@
                                Foreground="DarkBlue"
                                Padding="5,0,5,5"/>
                         <PasswordBox x:Name="txtPassword"
+                                     helpers:PasswordBoxHelper.BindPassword="True"
+                                     helpers:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      Height="35"
                                      FontSize="14"
                                      BorderBrush="LightGray"
-                                     BorderThickness="1"/>
+                                     BorderThickness="1">
+                            <PasswordBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding LoginCommand}"/>
+                            </PasswordBox.InputBindings>
+                        </PasswordBox>
                     </StackPanel>
 
                     <Button Grid.Row="3"
                             Content="Inloggen"
+                            Command="{Binding LoginCommand}"
                             Height="40"
                             FontSize="16"
                             FontWeight="Bold"
                             Background="DarkBlue"
                             Foreground="White"
-                            BorderBrush="DarkBlue"
-                            Click="BtnLogin_Click">
+                            BorderBrush="DarkBlue">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Style.Triggers>

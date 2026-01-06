@@ -3,14 +3,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using ZwembaadManager.Models;
 using ZwembaadManager.Events;
+using ZwembaadManager.Models;
 
 namespace ZwembaadManager.ViewModels
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
         private string _username = string.Empty;
+        private string _password = string.Empty;
         private string _errorMessage = string.Empty;
 
         public event EventHandler<LoginEventArgs>? LoginSuccessful;
@@ -25,6 +26,21 @@ namespace ZwembaadManager.ViewModels
                 {
                     _username = value;
                     OnPropertyChanged();
+                    ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set
+            {
+                if (_password != value)
+                {
+                    _password = value;
+                    OnPropertyChanged();
+                    ((RelayCommand)LoginCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -46,39 +62,32 @@ namespace ZwembaadManager.ViewModels
 
         public LoginViewModel()
         {
-            LoginCommand = new RelayCommand(() => PerformLogin());
-        }
-
-        public bool ValidateAndLogin(string username, string password)
-        {
-            ErrorMessage = string.Empty;
-
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                MessageBox.Show("Gelieve een gebruikersnaam in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Gelieve een wachtwoord in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            Username = username.Trim();
-            LoginSuccessful?.Invoke(this, new LoginEventArgs { Username = Username });
-            return true;
+            LoginCommand = new RelayCommand(PerformLogin);
         }
 
         private void PerformLogin()
         {
-            // This method will be called from the view with password parameter
-            // Password binding is handled differently due to security
+            ErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(Username))
+            {
+                MessageBox.Show("Gelieve een gebruikersnaam in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Password))
+            {
+                MessageBox.Show("Gelieve een wachtwoord in te voeren.", "Validatie", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            LoginSuccessful?.Invoke(this, new LoginEventArgs { Username = Username.Trim() });
         }
 
         public void ClearCredentials()
         {
             Username = string.Empty;
+            Password = string.Empty;
             ErrorMessage = string.Empty;
         }
 
