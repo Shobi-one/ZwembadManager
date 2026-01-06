@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="Models/Models.csproj" Id="58f02857-eb49-43d8-9290-accafbba6f3d" />
+  <Project Path="ViewModels/ViewModels.csproj" Id="2edd2c34-bd02-42ea-8ce7-fa1825311ee6" />
+  <Project Path="Views/Views.csproj" Id="87e9062b-1737-4808-a0a6-57d1f0062e68" />
   <Project Path="ZwembaadManager/ZwembaadManager.csproj" />
 </Solution>

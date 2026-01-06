@@ -92,12 +92,16 @@ namespace ZwembaadManager.ViewModels
     {
         private readonly JsonDataService _dataService;
         private ObservableCollection<Meet> _meets;
+        private ObservableCollection<Club> _clubs;
+        private ObservableCollection<SwimmingPool> _swimmingPools;
         private Meet? _selectedMeet;
         private bool _isLoading;
         private ObservableCollection<CalendarDay> _calendarDays;
         private DateTime _currentMonth;
         private string _currentMonthYear;
         private bool _isPopupOpen;
+        private string _selectedMeetClubName;
+        private string _selectedMeetSwimmingPoolName;
 
         public ObservableCollection<Meet> Meets
         {
@@ -113,6 +117,32 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public ObservableCollection<Club> Clubs
+        {
+            get => _clubs;
+            set
+            {
+                if (_clubs != value)
+                {
+                    _clubs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ObservableCollection<SwimmingPool> SwimmingPools
+        {
+            get => _swimmingPools;
+            set
+            {
+                if (_swimmingPools != value)
+                {
+                    _swimmingPools = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public Meet? SelectedMeet
         {
             get => _selectedMeet;
@@ -121,6 +151,33 @@ namespace ZwembaadManager.ViewModels
                 if (_selectedMeet != value)
                 {
                     _selectedMeet = value;
+                    OnPropertyChanged();
+                    UpdateSelectedMeetRelatedData();
+                }
+            }
+        }
+
+        public string SelectedMeetClubName
+        {
+            get => _selectedMeetClubName;
+            set
+            {
+                if (_selectedMeetClubName != value)
+                {
+                    _selectedMeetClubName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string SelectedMeetSwimmingPoolName
+        {
+            get => _selectedMeetSwimmingPoolName;
+            set
+            {
+                if (_selectedMeetSwimmingPoolName != value)
+                {
+                    _selectedMeetSwimmingPoolName = value;
                     OnPropertyChanged();
                 }
             }
@@ -194,9 +251,13 @@ namespace ZwembaadManager.ViewModels
         {
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _meets = new ObservableCollection<Meet>();
+            _clubs = new ObservableCollection<Club>();
+            _swimmingPools = new ObservableCollection<SwimmingPool>();
             _calendarDays = new ObservableCollection<CalendarDay>();
             _currentMonth = DateTime.Today;
             _currentMonthYear = string.Empty;
+            _selectedMeetClubName = string.Empty;
+            _selectedMeetSwimmingPoolName = string.Empty;
 
             LoadMeetsCommand = new RelayCommand(async () => await LoadMeets());
             SaveMeetCommand = new RelayCommand(async () => await SaveMeet(), () => _selectedMeet != null);
@@ -209,8 +270,41 @@ namespace ZwembaadManager.ViewModels
 
             GenerateCalendar();
 
-            // Load meets on initialization
-            _ = LoadMeets();
+            // Load all data on initialization
+            _ = LoadAllData();
+        }
+
+        private async Task LoadAllData()
+        {
+            await LoadClubs();
+            await LoadSwimmingPools();
+            await LoadMeets();
+        }
+
+        private async Task LoadClubs()
+        {
+            try
+            {
+                var clubs = await _dataService.LoadClubsAsync();
+                Clubs = new ObservableCollection<Club>(clubs);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fout bij het laden van clubs: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async Task LoadSwimmingPools()
+        {
+            try
+            {
+                var swimmingPools = await _dataService.LoadSwimmingPoolsAsync();
+                SwimmingPools = new ObservableCollection<SwimmingPool>(swimmingPools);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fout bij het laden van zwembaden: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async Task LoadMeets()
@@ -228,6 +322,38 @@ namespace ZwembaadManager.ViewModels
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        private void UpdateSelectedMeetRelatedData()
+        {
+            if (SelectedMeet == null)
+            {
+                SelectedMeetClubName = string.Empty;
+                SelectedMeetSwimmingPoolName = string.Empty;
+                return;
+            }
+
+            // Find and set club name
+            if (SelectedMeet.ClubId.HasValue)
+            {
+                var club = Clubs.FirstOrDefault(c => c.Id == SelectedMeet.ClubId.Value);
+                SelectedMeetClubName = club != null ? $"{club.Name} ({club.Abbreviation})" : "Onbekende club";
+            }
+            else
+            {
+                SelectedMeetClubName = "Geen club";
+            }
+
+            // Find and set swimming pool name
+            if (SelectedMeet.SwimmingPoolId.HasValue)
+            {
+                var pool = SwimmingPools.FirstOrDefault(sp => sp.Id == SelectedMeet.SwimmingPoolId.Value);
+                SelectedMeetSwimmingPoolName = pool != null ? pool.Name : "Onbekend zwembad";
+            }
+            else
+            {
+                SelectedMeetSwimmingPoolName = "Geen zwembad";
             }
         }
 

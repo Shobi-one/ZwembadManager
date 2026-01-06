@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.ComponentModel;
@@ -16,8 +17,10 @@ namespace ZwembaadManager.ViewModels
         private readonly JsonDataService _dataService;
         private readonly IDialogService _dialogService;
         private ObservableCollection<User> _users;
+        private ObservableCollection<Club> _clubs;
         private User? _selectedUser;
         private bool _isLoading;
+        private string _selectedUserClubName;
 
         public ObservableCollection<User> Users
         {
@@ -32,6 +35,19 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public ObservableCollection<Club> Clubs
+        {
+            get => _clubs;
+            set
+            {
+                if (_clubs != value)
+                {
+                    _clubs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public User? SelectedUser
         {
             get => _selectedUser;
@@ -41,8 +57,22 @@ namespace ZwembaadManager.ViewModels
                 {
                     _selectedUser = value;
                     OnPropertyChanged();
+                    UpdateSelectedUserClubName();
                     ((RelayCommand)SaveUserCommand).RaiseCanExecuteChanged();
                     ((RelayCommand)DeleteUserCommand).RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public string SelectedUserClubName
+        {
+            get => _selectedUserClubName;
+            set
+            {
+                if (_selectedUserClubName != value)
+                {
+                    _selectedUserClubName = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -70,6 +100,8 @@ namespace ZwembaadManager.ViewModels
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _users = new ObservableCollection<User>();
+            _clubs = new ObservableCollection<Club>();
+            _selectedUserClubName = string.Empty;
 
             SaveUserCommand = new RelayCommand(async () => await SaveUser(), () => _selectedUser != null);
             DeleteUserCommand = new RelayCommand(async () => await DeleteUser(), () => _selectedUser != null);
@@ -77,7 +109,21 @@ namespace ZwembaadManager.ViewModels
 
         public async Task InitializeAsync()
         {
+            await LoadClubs();
             await LoadUsers();
+        }
+
+        private async Task LoadClubs()
+        {
+            try
+            {
+                var clubs = await _dataService.LoadClubsAsync();
+                Clubs = new ObservableCollection<Club>(clubs);
+            }
+            catch (Exception ex)
+            {
+                _dialogService.ShowError($"Fout bij het laden van clubs: {ex.Message}", "Fout");
+            }
         }
 
         private async Task LoadUsers()
@@ -101,6 +147,18 @@ namespace ZwembaadManager.ViewModels
             {
                 IsLoading = false;
             }
+        }
+
+        private void UpdateSelectedUserClubName()
+        {
+            if (SelectedUser == null || !SelectedUser.ClubId.HasValue)
+            {
+                SelectedUserClubName = "Geen club";
+                return;
+            }
+
+            var club = Clubs.FirstOrDefault(c => c.Id == SelectedUser.ClubId.Value);
+            SelectedUserClubName = club != null ? $"{club.Name} ({club.Abbreviation})" : "Onbekende club";
         }
 
         private async Task SaveUser()

@@ -578,7 +578,16 @@
                                         <TextBox Text="{Binding SelectedUser.ClubId, UpdateSourceTrigger=PropertyChanged}" 
                                                  Padding="10"
                                                  Margin="0,0,0,15"/>
-
+                                        <TextBlock Text="🏊 Club Naam" 
+                                               FontWeight="Bold" 
+                                               Foreground="#003366" 
+                                               Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding SelectedUserClubName}" 
+                                               Margin="0,0,0,15"
+                                               Foreground="#1E90FF"
+                                               FontWeight="SemiBold"
+                                               Padding="10,5"
+                                               Background="#F0F8FF"/>
                                         <TextBlock Text="Actief" 
                                                    FontWeight="Bold" 
                                                    Foreground="#003366" 
