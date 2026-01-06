@@ -97,6 +97,7 @@ namespace ZwembaadManager.ViewModels
         private ObservableCollection<CalendarDay> _calendarDays;
         private DateTime _currentMonth;
         private string _currentMonthYear;
+        private bool _isPopupOpen;
 
         public ObservableCollection<Meet> Meets
         {
@@ -164,12 +165,27 @@ namespace ZwembaadManager.ViewModels
             }
         }
 
+        public bool IsPopupOpen
+        {
+            get => _isPopupOpen;
+            set
+            {
+                if (_isPopupOpen != value)
+                {
+                    _isPopupOpen = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand LoadMeetsCommand { get; }
         public ICommand SaveMeetCommand { get; }
         public ICommand DeleteMeetCommand { get; }
         public ICommand PreviousMonthCommand { get; }
         public ICommand NextMonthCommand { get; }
         public ICommand TodayCommand { get; }
+        public ICommand OpenMeetDetailsCommand { get; }
+        public ICommand ClosePopupCommand { get; }
 
         public event EventHandler<string>? MeetSaved;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -188,8 +204,13 @@ namespace ZwembaadManager.ViewModels
             PreviousMonthCommand = new RelayCommand(() => NavigateMonth(-1));
             NextMonthCommand = new RelayCommand(() => NavigateMonth(1));
             TodayCommand = new RelayCommand(() => NavigateToToday());
+            OpenMeetDetailsCommand = new RelayCommand<Meet>(meet => OpenMeetDetails(meet));
+            ClosePopupCommand = new RelayCommand(() => ClosePopup());
 
             GenerateCalendar();
+
+            // Load meets on initialization
+            _ = LoadMeets();
         }
 
         private async Task LoadMeets()
@@ -223,6 +244,7 @@ namespace ZwembaadManager.ViewModels
                 MessageBox.Show("Meeting succesvol opgeslagen.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
                 MeetSaved?.Invoke(this, $"Meet {SelectedMeet.Name} opgeslagen");
                 GenerateCalendar();
+                IsPopupOpen = false;
             }
             catch (Exception ex)
             {
@@ -250,6 +272,7 @@ namespace ZwembaadManager.ViewModels
                 MessageBox.Show("Meeting succesvol verwijderd.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
                 SelectedMeet = null;
                 GenerateCalendar();
+                IsPopupOpen = false;
             }
             catch (Exception ex)
             {
@@ -339,6 +362,20 @@ namespace ZwembaadManager.ViewModels
             }
 
             CalendarDays = calendar;
+        }
+
+        private void OpenMeetDetails(Meet? meet)
+        {
+            if (meet != null)
+            {
+                SelectedMeet = meet;
+                IsPopupOpen = true;
+            }
+        }
+
+        private void ClosePopup()
+        {
+            IsPopupOpen = false;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)

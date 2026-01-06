@@ -7,6 +7,8 @@
              d:DesignHeight="600" d:DesignWidth="966">
 
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+        
         <!-- Custom ScrollBar Style -->
         <Style x:Key="CustomScrollBarThumb" TargetType="Thumb">
             <Setter Property="Template">
@@ -482,8 +484,8 @@
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
                                                             <Button Content="{Binding Name}" 
-                                                                    Click="MeetButton_Click"
-                                                                    Tag="{Binding}"
+                                                                    Command="{Binding DataContext.OpenMeetDetailsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                                    CommandParameter="{Binding}"
                                                                     Background="#4682B4" 
                                                                     Foreground="White"
                                                                     FontSize="11" 
@@ -569,7 +571,7 @@
 
         <!-- Popup Modal -->
         <Grid x:Name="EditPopup" 
-              Visibility="Collapsed"
+              Visibility="{Binding IsPopupOpen, Converter={StaticResource BoolToVisConverter}}"
               Background="#80000000">
             <Border MaxWidth="650"
                     MaxHeight="750"
@@ -603,7 +605,7 @@
                                    VerticalAlignment="Center"/>
                         
                         <Button Content="✕" 
-                                Click="ClosePopup_Click"
+                                Command="{Binding ClosePopupCommand}"
                                 HorizontalAlignment="Right"
                                 Width="30" 
                                 Height="30"
@@ -740,14 +742,12 @@
                                 HorizontalAlignment="Center"
                                 Margin="0,20,0,0">
                         <Button Content="Opslaan" 
-                                Click="SaveAndClosePopup_Click"
                                 Command="{Binding SaveMeetCommand}" 
                                 Style="{StaticResource AeroGlassButtonStyle}"
                                 Width="140" 
                                 Height="45"
                                 Margin="0,0,15,0"/>
                         <Button Content="Verwijderen" 
-                                Click="DeleteAndClosePopup_Click"
                                 Command="{Binding DeleteMeetCommand}" 
                                 Style="{StaticResource AeroDangerButtonStyle}"
                                 Width="140" 

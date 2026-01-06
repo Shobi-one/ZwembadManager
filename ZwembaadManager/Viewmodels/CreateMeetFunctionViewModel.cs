@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using ZwembaadManager.Models;
 using ZwembaadManager.Services;
 
 namespace ZwembaadManager.ViewModels

@@ -2,18 +2,19 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows.Input;
-using System.Windows;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ZwembaadManager.Classes;
 using ZwembaadManager.Services;
+using ZwembaadManager.Models;
 
 namespace ZwembaadManager.ViewModels
 {
     public class UsersListViewModel : INotifyPropertyChanged
     {
         private readonly JsonDataService _dataService;
+        private readonly IDialogService _dialogService;
         private ObservableCollection<User> _users;
         private User? _selectedUser;
         private bool _isLoading;
@@ -40,6 +41,8 @@ namespace ZwembaadManager.ViewModels
                 {
                     _selectedUser = value;
                     OnPropertyChanged();
+                    ((RelayCommand)SaveUserCommand).RaiseCanExecuteChanged();
+                    ((RelayCommand)DeleteUserCommand).RaiseCanExecuteChanged();
                 }
             }
         }
@@ -62,14 +65,19 @@ namespace ZwembaadManager.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public UsersListViewModel(JsonDataService dataService)
+        public UsersListViewModel(JsonDataService dataService, IDialogService dialogService)
         {
             _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _users = new ObservableCollection<User>();
 
             SaveUserCommand = new RelayCommand(async () => await SaveUser(), () => _selectedUser != null);
             DeleteUserCommand = new RelayCommand(async () => await DeleteUser(), () => _selectedUser != null);
-            _ = LoadUsers();
+        }
+
+        public async Task InitializeAsync()
+        {
+            await LoadUsers();
         }
 
         private async Task LoadUsers()
@@ -87,7 +95,7 @@ namespace ZwembaadManager.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Fout bij het laden van gebruikers: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                _dialogService.ShowError($"Fout bij het laden van gebruikers: {ex.Message}", "Fout");
             }
             finally
             {
@@ -105,11 +113,11 @@ namespace ZwembaadManager.ViewModels
                 IsLoading = true;
                 var usersList = new List<User>(Users);
                 await _dataService.SaveUsersAsync(usersList);
-                MessageBox.Show("Gebruiker succesvol opgeslagen.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+                _dialogService.ShowInformation("Gebruiker succesvol opgeslagen.", "Succes");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Fout bij het opslaan van de gebruiker: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                _dialogService.ShowError($"Fout bij het opslaan van de gebruiker: {ex.Message}", "Fout");
             }
             finally
             {
@@ -122,8 +130,11 @@ namespace ZwembaadManager.ViewModels
             if (SelectedUser == null)
                 return;
 
-            var result = MessageBox.Show($"Weet je zeker dat je '{SelectedUser.FirstName} {SelectedUser.LastName}' wilt verwijderen?", "Bevestiging", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result != MessageBoxResult.Yes)
+            var result = _dialogService.ShowConfirmation(
+                $"Weet je zeker dat je '{SelectedUser.FirstName} {SelectedUser.LastName}' wilt verwijderen?",
+                "Bevestiging");
+
+            if (result != DialogResult.Yes)
                 return;
 
             try
@@ -132,12 +143,12 @@ namespace ZwembaadManager.ViewModels
                 Users.Remove(SelectedUser);
                 var usersList = new List<User>(Users);
                 await _dataService.SaveUsersAsync(usersList);
-                MessageBox.Show("Gebruiker succesvol verwijderd.", "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+                _dialogService.ShowInformation("Gebruiker succesvol verwijderd.", "Succes");
                 SelectedUser = null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Fout bij het verwijderen van de gebruiker: {ex.Message}", "Fout", MessageBoxButton.OK, MessageBoxImage.Error);
+                _dialogService.ShowError($"Fout bij het verwijderen van de gebruiker: {ex.Message}", "Fout");
             }
             finally
             {

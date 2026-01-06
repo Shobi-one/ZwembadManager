@@ -22,8 +22,6 @@ namespace ZwembaadManager.Views
 
             var dataService = new JsonDataService();
             _viewModel = new CreateMeetViewModel(dataService);
-
-            // Forward ViewModel events to View events for MainWindow
             _viewModel.BackToDashboardRequested += (sender, e) => BackToDashboardRequested?.Invoke(this, e);
             _viewModel.MeetSaveRequested += (sender, e) => MeetSaveRequested?.Invoke(this, e);
 

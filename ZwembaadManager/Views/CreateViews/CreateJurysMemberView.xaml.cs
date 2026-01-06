@@ -21,8 +21,6 @@ namespace ZwembaadManager.Views
 
             var dataService = new JsonDataService();
             _viewModel = new CreateJurysMemberViewModel(dataService);
-
-            // Forward ViewModel events to View events for MainWindow
             _viewModel.BackToDashboardRequested += (sender, e) => BackToDashboardRequested?.Invoke(this, e);
             _viewModel.JurysMemberSaveRequested += (sender, e) => JurysMemberSaveRequested?.Invoke(this, e);
 

@@ -9,7 +9,5 @@
         Height="600" Width="1000"
         WindowState="Normal"
         ResizeMode="CanResize">
-    <Grid>
-        <ContentControl x:Name="MainContentArea"/>
-    </Grid>
+    <ContentControl Content="{Binding CurrentView}" />
 </Window>

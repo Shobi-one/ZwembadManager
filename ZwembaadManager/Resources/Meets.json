@@ -1,7 +1,7 @@
 [
   {
     "Id": "a2235c13-f033-4220-868d-4cbdd9e2fd38",
-    "Name": "Test",
+    "Name": "Test2",
     "Date": "2026-01-06T00:00:00+01:00",
     "PartOfTheDay": "Morning",
     "MeetState": "Planned",
@@ -12,6 +12,6 @@
     "NumberOfExams": 2,
     "Remarks": "",
     "CreatedDate": "2026-01-06T18:45:12.3153585+01:00",
-    "ModifiedDate": "2026-01-06T18:45:12.3153604+01:00"
+    "ModifiedDate": "2026-01-06T19:44:43.021054+01:00"
   }
 ]

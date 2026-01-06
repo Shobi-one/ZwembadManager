@@ -13,8 +13,15 @@ namespace ZwembaadManager.Views
         public UsersListView()
         {
             InitializeComponent();
+
             var dataService = new JsonDataService();
-            DataContext = new UsersListViewModel(dataService);
+            var dialogService = new DialogService();
+            var viewModel = new UsersListViewModel(dataService, dialogService);
+            
+            DataContext = viewModel;
+            
+            // Initialize async
+            Loaded += async (s, e) => await viewModel.InitializeAsync();
         }
 
         private void BackToDashboard_Click(object sender, RoutedEventArgs e)

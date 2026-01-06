@@ -11,14 +11,12 @@ namespace ZwembaadManager.Views
     {
         public event EventHandler<string>? OpenViewRequested;
         public event EventHandler? LogoutRequested;
-        public event EventHandler? RefreshRequested;
 
         public DashboardView()
         {
             InitializeComponent();
             var viewModel = new DashboardViewModel();
 
-    
             viewModel.OpenViewRequested += (sender, viewType) => OpenViewRequested?.Invoke(this, viewType);
             viewModel.LogoutRequested += (sender, e) => LogoutRequested?.Invoke(this, e);
 
