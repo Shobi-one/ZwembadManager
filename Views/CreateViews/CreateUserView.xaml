@@ -352,7 +352,6 @@
                             <ContentPresenter x:Name="contentPresenter"
                                               Content="{TemplateBinding SelectionBoxItem}"
                                               ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                               ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
                                               Margin="12,10"
                                               HorizontalAlignment="Left"
