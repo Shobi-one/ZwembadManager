@@ -24,12 +24,5 @@ namespace ZwembaadManager.Views
 
             Loaded += (s, e) => txtUsername.Focus();
         }
-
-        public void ClearCredentials()
-        {
-            _viewModel.ClearCredentials();
-            txtPassword.Clear();
-            txtUsername.Focus();
-        }
     }
 }

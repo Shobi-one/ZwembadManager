@@ -22,5 +22,17 @@
     "Mobile": "48938863436",
     "KeycloakGroups": "M",
     "IsActive": true
+  },
+  {
+    "Id": "306e478c-5e16-4c79-8c87-5d46e6478865",
+    "ClubId": "2fb0aaaf-6781-4ac5-ab70-39efd1aa87cf",
+    "FirstName": "aaa",
+    "LastName": "vvaa",
+    "License": "aeaSD",
+    "County": "Aaaa",
+    "Email": "oaa@fa.com",
+    "Mobile": "047293859",
+    "KeycloakGroups": "V",
+    "IsActive": true
   }
 ]
