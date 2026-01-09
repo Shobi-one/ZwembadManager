@@ -7,6 +7,8 @@ namespace ZwembaadManager
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    /// 
+    //todo dependency injection
     public partial class App : Application
     {
     }
