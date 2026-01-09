@@ -1,122 +1,38 @@
 [
-    {
-        "Id": 1,
-        "ClubId": 1,
-        "FirstName": "Gregory",
-        "LastName": "Guzman",
-        "License": "LIC304",
-        "County": "Limburg",
-        "Email": "angela28@cooper.net",
-        "Mobile": "+32461 618802",
-        "KeycloakGroups": "User",
-        "IsActive": false
-    },
-    {
-        "Id": 2,
-        "ClubId": 2,
-        "FirstName": "Nancy",
-        "LastName": "Anderson",
-        "License": "LIC683",
-        "County": "Luik",
-        "Email": "qsmith@beck.com",
-        "Mobile": "(077)-9223964",
-        "KeycloakGroups": "User",
-        "IsActive": true
-    },
-    {
-        "Id": 3,
-        "ClubId": 4,
-        "FirstName": "Daniel",
-        "LastName": "Davis",
-        "License": "LIC246",
-        "County": "Limburg",
-        "Email": "kimberlyaguilar@jones.com",
-        "Mobile": "0408 313883",
-        "KeycloakGroups": "User",
-        "IsActive": true
-    },
-    {
-        "Id": 4,
-        "ClubId": 7,
-        "FirstName": "Michael",
-        "LastName": "Guzman",
-        "License": "LIC608",
-        "County": "Namen",
-        "Email": "toconnor@yu.biz",
-        "Mobile": "+32(0)590 658617",
-        "KeycloakGroups": "User",
-        "IsActive": false
-    },
-    {
-        "Id": 5,
-        "ClubId": 10,
-        "FirstName": "Dawn",
-        "LastName": "Smith",
-        "License": "LIC090",
-        "County": "Vlaams-Brabant",
-        "Email": "braywilliam@yahoo.com",
-        "Mobile": "0170-447298",
-        "KeycloakGroups": "User",
-        "IsActive": true
-    },
-    {
-        "Id": 6,
-        "ClubId": 7,
-        "FirstName": "Mikayla",
-        "LastName": "Oliver",
-        "License": "LIC169",
-        "County": "Henegouwen",
-        "Email": "mruiz@price.com",
-        "Mobile": "+3258 6380266",
-        "KeycloakGroups": "User",
-        "IsActive": false
-    },
-    {
-        "Id": 7,
-        "ClubId": 6,
-        "FirstName": "Jason",
-        "LastName": "Lynch",
-        "License": "LIC154",
-        "County": "Limburg",
-        "Email": "tom59@yahoo.com",
-        "Mobile": "+32(0)94 3418303",
-        "KeycloakGroups": "User",
-        "IsActive": true
-    },
-    {
-        "Id": 8,
-        "ClubId": 7,
-        "FirstName": "Todd",
-        "LastName": "Brown",
-        "License": "LIC039",
-        "County": "Henegouwen",
-        "Email": "jill72@simpson.com",
-        "Mobile": "+32449 986111",
-        "KeycloakGroups": "User",
-        "IsActive": true
-    },
-    {
-        "Id": 9,
-        "ClubId": 4,
-        "FirstName": "Lori",
-        "LastName": "Vang",
-        "License": "LIC718",
-        "County": "Waals-Brabant",
-        "Email": "lesliegonzalez@mitchell.com",
-        "Mobile": "(075) 7746563",
-        "KeycloakGroups": "User",
-        "IsActive": false
-    },
-    {
-        "Id": 10,
-        "ClubId": 4,
-        "FirstName": "Dale",
-        "LastName": "Kline",
-        "License": "LIC078",
-        "County": "Namen",
-        "Email": "fallen@hotmail.com",
-        "Mobile": "+3209-2340128",
-        "KeycloakGroups": "User",
-        "IsActive": false
-    }
+  {
+    "Id": "eb887d35-4fd8-477b-903a-ba5805703f4b",
+    "ClubId": null,
+    "FirstName": "Obi",
+    "LastName": "Verheyen",
+    "License": "",
+    "County": "",
+    "Email": "obiverheyen@gmail.com",
+    "Mobile": "047283593",
+    "KeycloakGroups": "M",
+    "IsActive": true
+  },
+  {
+    "Id": "ba0548c7-c06d-456d-8f5f-25f3d4181d9b",
+    "ClubId": "2fb0aaaf-6781-4ac5-ab70-39efd1aa87cf",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "License": "idk",
+    "County": "Oost-Vlaanderen",
+    "Email": "JohnDoe@gmail.com",
+    "Mobile": "48938863436",
+    "KeycloakGroups": "M",
+    "IsActive": true
+  },
+  {
+    "Id": "306e478c-5e16-4c79-8c87-5d46e6478865",
+    "ClubId": "2fb0aaaf-6781-4ac5-ab70-39efd1aa87cf",
+    "FirstName": "aaa",
+    "LastName": "vvaa",
+    "License": "aeaSD",
+    "County": "Aaaa",
+    "Email": "oaa@fa.com",
+    "Mobile": "047293859",
+    "KeycloakGroups": "V",
+    "IsActive": true
+  }
 ]

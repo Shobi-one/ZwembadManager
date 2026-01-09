@@ -10,33 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Addresses.json" />
-    <None Remove="Resources\Clubs.json" />
-    <None Remove="Resources\FunctionAssignments.json" />
-    <None Remove="Resources\Functions.json" />
-    <None Remove="Resources\JurysMembers.json" />
-    <None Remove="Resources\MeetFunctions.json" />
-    <None Remove="Resources\Meets.json" />
-    <None Remove="Resources\SwimmingPools.json" />
-    <None Remove="Resources\Users.json" />
-    <None Remove="Resources\UsersFunctions.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Addresses.json" />
-    <EmbeddedResource Include="Resources\Clubs.json" />
-    <EmbeddedResource Include="Resources\FunctionAssignments.json" />
-    <EmbeddedResource Include="Resources\Functions.json" />
-    <EmbeddedResource Include="Resources\JurysMembers.json" />
-    <EmbeddedResource Include="Resources\MeetFunctions.json" />
-    <EmbeddedResource Include="Resources\Meets.json" />
-    <EmbeddedResource Include="Resources\SwimmingPools.json" />
-    <EmbeddedResource Include="Resources\Users.json" />
-    <EmbeddedResource Include="Resources\UsersFunctions.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Viewmodels\" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+    <ProjectReference Include="..\Views\Views.csproj" />
   </ItemGroup>
 
 </Project>

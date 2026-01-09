@@ -1,52 +1,9 @@
 [
-    {
-        "Id": 1,
-        "Name": "Product/process development scientist",
-        "Abbreviation": "FP"
-    },
-    {
-        "Id": 2,
-        "Name": "Engineer, production",
-        "Abbreviation": "XF"
-    },
-    {
-        "Id": 3,
-        "Name": "Immunologist",
-        "Abbreviation": "RJ"
-    },
-    {
-        "Id": 4,
-        "Name": "Waste management officer",
-        "Abbreviation": "GM"
-    },
-    {
-        "Id": 5,
-        "Name": "Risk manager",
-        "Abbreviation": "SU"
-    },
-    {
-        "Id": 6,
-        "Name": "Naval architect",
-        "Abbreviation": "CI"
-    },
-    {
-        "Id": 7,
-        "Name": "Photographer",
-        "Abbreviation": "HB"
-    },
-    {
-        "Id": 8,
-        "Name": "Tourist information centre manager",
-        "Abbreviation": "OJ"
-    },
-    {
-        "Id": 9,
-        "Name": "Land/geomatics surveyor",
-        "Abbreviation": "SF"
-    },
-    {
-        "Id": 10,
-        "Name": "Futures trader",
-        "Abbreviation": "CU"
-    }
+  {
+    "Id": "c04a31f7-a47c-4984-9f1f-aeb5d7af9b9e",
+    "Name": "AAAA",
+    "Abbreviation": "T.T",
+    "CreatedDate": "2026-01-06T18:47:54.8743843+01:00",
+    "ModifiedDate": "2026-01-06T19:45:01.3608002+01:00"
+  }
 ]
